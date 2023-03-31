@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
+import { privateProcedure } from '../trpc'
 
 const filterUserForClient = (user: User) => {
   return { id: user.id, username: user.username, profilePicture: user.profileImageUrl }
@@ -13,6 +14,9 @@ export const postsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       take: 100,
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     const users = (
@@ -31,4 +35,23 @@ export const postsRouter = createTRPCRouter({
       return { post, author: { ...author, username: author.username } }
     })
   }),
+
+  create: privateProcedure
+    .input(
+      z.object({
+        content: z.string().emoji('Only emojis are allowed').min(1).max(255),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId
+
+      const post = await ctx.prisma.post.create({
+        data: {
+          authorId,
+          content: input.content,
+        },
+      })
+
+      return post
+    }),
 })

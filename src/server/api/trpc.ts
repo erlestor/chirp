@@ -30,8 +30,6 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
 
   const userId = sesh.userId
 
-  console.log(sesh)
-
   return {
     prisma,
     userId,

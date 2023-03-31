@@ -1,27 +1,37 @@
-import { SignInButton, useUser } from '@clerk/nextjs'
-import { type NextPage } from 'next'
-import Head from 'next/head'
-import { api } from '~/utils/api'
-import type { RouterOutputs } from '../utils/api'
+import { SignInButton, useUser } from "@clerk/nextjs"
+import { type NextPage } from "next"
+import Head from "next/head"
+import { api } from "~/utils/api"
+import type { RouterOutputs } from "../utils/api"
 
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import Image from 'next/image'
-import { LoadingPage } from '~/components/loading'
-import { useState } from 'react'
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+import Image from "next/image"
+import { LoadingPage } from "~/components/loading"
+import { useState } from "react"
+import { toast } from "react-hot-toast"
+import { LoadingSpinner } from "../components/loading"
+import Link from "next/link"
 
 dayjs.extend(relativeTime)
 
 const CreatePostWizard = () => {
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState("")
   const { user } = useUser()
 
   const ctx = api.useContext()
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
-      setInput('')
+      setInput("")
       void ctx.posts.getAll.invalidate()
+    },
+    onError: e => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content
+      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
+      else {
+        toast.error("Failed to post! Please try again later")
+      }
     },
   })
 
@@ -42,14 +52,29 @@ const CreatePostWizard = () => {
         className='grow bg-transparent outline-none'
         value={input}
         onChange={e => setInput(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            if (input !== "") mutate({ content: input })
+          }
+        }}
         disabled={isPosting}
       />
-      <button onClick={() => mutate({ content: input })}>Post</button>
+      {input !== "" && !isPosting && (
+        <button onClick={() => mutate({ content: input })} disabled={isPosting}>
+          Post
+        </button>
+      )}
+      {isPosting && (
+        <div className='flex items-center justify-center'>
+          <LoadingSpinner size={20} />
+        </div>
+      )}
     </div>
   )
 }
 
-type PostWithUser = RouterOutputs['posts']['getAll'][number]
+type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
@@ -65,8 +90,12 @@ const PostView = (props: PostWithUser) => {
       />
       <div className='flex flex-col'>
         <div className='flex text-slate-300 gap-1'>
-          <span>{`@${author.username}`}</span>
-          <span className='font-thin'>{` · ${dayjs(post.createdAt).fromNow()}`}</span>
+          <Link href={`/@${author.username}`}>
+            <span>{`@${author.username}`}</span>
+          </Link>
+          <Link href={`/post/${post.id}`}>
+            <span className='font-thin'>{` · ${dayjs(post.createdAt).fromNow()}`}</span>
+          </Link>
         </div>
         <span className='text-2xl'>{post.content}</span>
       </div>

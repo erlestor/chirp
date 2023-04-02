@@ -7,9 +7,9 @@ import { createTRPCRouter, publicProcedure, privateProcedure } from "~/server/ap
 import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "../helpers/filterUserForClient"
-import { Post } from "@prisma/client"
+import type { Post } from "@prisma/client"
 
-const addUserDataToPost = async (posts: Post[]) => {
+const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({
       userId: posts.map((post) => post.authorId),
@@ -36,6 +36,18 @@ const ratelimit = new Ratelimit({
 })
 
 export const postsRouter = createTRPCRouter({
+  getById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const post = await ctx.prisma.post.findUnique({
+      where: {
+        id: input.id,
+      },
+    })
+
+    if (!post) throw new TRPCError({ code: "NOT_FOUND" })
+
+    return (await addUserDataToPosts([post]))[0]
+  }),
+
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       take: 100,
@@ -44,7 +56,7 @@ export const postsRouter = createTRPCRouter({
       },
     })
 
-    return addUserDataToPost(posts)
+    return addUserDataToPosts(posts)
   }),
 
   getPostsByUserId: publicProcedure.input(z.object({ userId: z.string() })).query(
@@ -57,7 +69,7 @@ export const postsRouter = createTRPCRouter({
           take: 100,
           orderBy: [{ createdAt: "desc" }],
         })
-        .then(addUserDataToPost)
+        .then(addUserDataToPosts)
   ),
 
   create: privateProcedure

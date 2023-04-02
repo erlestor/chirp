@@ -7,6 +7,24 @@ import { prisma } from "~/server/db"
 import superjson from "superjson"
 import { PageLayout } from "~/components/layout"
 import Image from "next/image"
+import { LoadingPage } from "~/components/loading"
+import { PostView } from "~/components/postview"
+
+const ProfileFeed = (props: { userId: string }) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({ userId: props.userId })
+
+  if (isLoading) return <LoadingPage />
+
+  if (!data || data.length === 0) return <div>User has not posted</div>
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullPost) => (
+        <PostView key={fullPost.post.id} {...fullPost} />
+      ))}
+    </div>
+  )
+}
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data } = api.profile.getUserByUsername.useQuery({
@@ -21,18 +39,19 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <title>{data.username}</title>
       </Head>
       <PageLayout>
-        <div className=' bg-slate-600 h-36 relative'>
+        <div className=" bg-slate-600 h-36 relative">
           <Image
             src={data.profilePicture}
-            alt='profile'
+            alt="profile"
             width={128}
             height={128}
-            className='-mb-[64px] absolute left-0 ml-4 bottom-0 rounded-full border-4 border-black'
+            className="-mb-[64px] absolute left-0 ml-4 bottom-0 rounded-full border-4 border-black"
           />
         </div>
-        <div className='h-[64px]' />
-        <div className='p-4 text-2xl font-bold'>{`@${data.username ?? ""}`}</div>
-        <div className='border-b border-slate-100 w-full' />
+        <div className="h-[64px]" />
+        <div className="p-4 text-2xl font-bold">{`@${data.username ?? ""}`}</div>
+        <div className="border-b border-slate-100 w-full" />
+        <ProfileFeed userId={data.id} />
       </PageLayout>
     </>
   )

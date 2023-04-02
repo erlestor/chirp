@@ -2,6 +2,6 @@ printWidth: 100 # 代码宽度建议不超过100字符
 tabWidth: 2 # tab缩进2个空格
 semi: false # 末尾分号
 singleQuote: false # 单引号
-jsxSingleQuote: true # jsx中使用单引号
+jsxSingleQuote: false # jsx中使用单引号
 trailingComma: "es5" # 尾随逗号
 htmlWhitespaceSensitivity: "css" # html空格敏感度

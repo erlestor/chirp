@@ -4,7 +4,7 @@ import { PostView } from "./postview"
 
 type PostWithUser = RouterOutputs["posts"]["getAll"]
 
-export const Feed = (props: { data: PostWithUser | undefined; isLoading: boolean }) => {
+export const Feed = (props: { data?: PostWithUser; isLoading: boolean }) => {
   const { data, isLoading: postsLoading } = props
 
   if (postsLoading) return <LoadingPage />

@@ -63,12 +63,13 @@ export const postsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 5
       const { cursor } = input
+      // const cursor = "clfwm1b8w000cuyiszq5xuclp" as string
 
       const posts = await ctx.prisma.post.findMany({
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          id: "asc",
+          id: "desc",
         },
       })
 

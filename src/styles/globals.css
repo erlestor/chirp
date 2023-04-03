@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black text-slate-100 overscroll-none;
+  /* Overflow-hidden often hides error in styling. Used to prevent extra scrollbar when infinitescroll is loading */
+  @apply bg-black text-slate-100 overscroll-none overflow-hidden;
 }

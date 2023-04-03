@@ -1,9 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-
 import { createTRPCRouter, publicProcedure, privateProcedure } from "~/server/api/trpc"
-
 import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "../helpers/filterUserForClient"
@@ -59,6 +57,32 @@ export const postsRouter = createTRPCRouter({
 
     return addUserDataToPosts(posts)
   }),
+
+  getInfinitePosts: publicProcedure
+    .input(z.object({ cursor: z.string().nullish() }))
+    .query(async ({ ctx, input }) => {
+      const limit = 10
+      const { cursor } = input
+      const posts = await ctx.prisma.post.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          id: "asc",
+        },
+      })
+      let nextCursor: typeof cursor | undefined = undefined
+      if (posts.length > limit) {
+        const nextPost = posts.pop()
+        nextCursor = nextPost!.id
+      }
+
+      const postsWithUser = addUserDataToPosts(posts)
+
+      return {
+        posts: postsWithUser,
+        nextCursor,
+      }
+    }),
 
   getPostsByUserId: publicProcedure.input(z.object({ userId: z.string() })).query(
     async ({ ctx, input }) =>

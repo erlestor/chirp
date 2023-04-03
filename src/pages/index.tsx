@@ -2,14 +2,13 @@ import { SignInButton, useUser } from "@clerk/nextjs"
 import { type NextPage } from "next"
 import { api } from "~/utils/api"
 import Image from "next/image"
-import { LoadingPage } from "~/components/loading"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
 import { LoadingSpinner } from "../components/loading"
 import { PageLayout } from "~/components/layout"
-import { PostView } from "~/components/postview"
 import { emojiValidator } from "~/utils/zodValidators"
 import Link from "next/link"
+import { Feed } from "~/components/feed"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -44,7 +43,7 @@ const CreatePostWizard = () => {
     else toast.error(error.message)
   }
 
-  if (!user || !user.username) return null
+  if (!user || !user.username) return <div />
 
   return (
     <div className="flex gap-3 w-full">
@@ -85,27 +84,10 @@ const CreatePostWizard = () => {
   )
 }
 
-const Feed = () => {
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
-
-  if (postsLoading) return <LoadingPage />
-
-  if (!data) return <div>Something went wrong</div>
-
-  return (
-    <div className="flex flex-col">
-      {data.map((fullPost) => (
-        <PostView key={fullPost.post.id} {...fullPost} />
-      ))}
-    </div>
-  )
-}
-
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser()
 
-  // start fetching asap
-  api.posts.getAll.useQuery()
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
 
   // Return empty div if user is not loaded, caching makes sure we dont fetch twice
   if (!userLoaded) return <div />
@@ -121,7 +103,7 @@ const Home: NextPage = () => {
           )}
           {isSignedIn && <CreatePostWizard />}
         </div>
-        <Feed />
+        <Feed data={data} isLoading={postsLoading} />
       </PageLayout>
     </>
   )

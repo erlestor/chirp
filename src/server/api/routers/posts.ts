@@ -8,6 +8,7 @@ import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "../helpers/filterUserForClient"
 import type { Post } from "@prisma/client"
+import { emojiValidator } from "~/utils/zodValidators"
 
 const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
@@ -75,7 +76,7 @@ export const postsRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
-        content: z.string().emoji("Only emojis are allowed").min(1).max(255),
+        content: emojiValidator,
       })
     )
     .mutation(async ({ ctx, input }) => {

@@ -22,16 +22,18 @@ export const PostView = (props: PostWithUser) => {
           height={56}
         />
       </Link>
-      <div className="flex flex-col">
+      <div className="flex flex-col grow">
         <div className="flex text-slate-300 gap-1">
           <Link href={`/@${author.username}`}>
             <span>{`@${author.username}`}</span>
           </Link>
           <Link href={`/post/${post.id}`}>
-            <span className="font-thin">{` · ${dayjs(post.createdAt).fromNow()}`}</span>
+            <span className="font-thin flex grow">{` · ${dayjs(post.createdAt).fromNow()}`}</span>
           </Link>
         </div>
-        <span className="text-2xl">{post.content}</span>
+        <Link href={`/post/${post.id}`}>
+          <span className="text-2xl grow">{post.content}</span>
+        </Link>
       </div>
     </div>
   )

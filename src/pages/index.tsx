@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast"
 import { LoadingSpinner } from "../components/loading"
 import { PageLayout } from "~/components/layout"
 import { PostView } from "~/components/postview"
+import { emojiValidator } from "~/utils/zodValidators"
+import Link from "next/link"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -29,17 +31,32 @@ const CreatePostWizard = () => {
     },
   })
 
-  if (!user) return null
+  const handleSubmit = () => {
+    const result = emojiValidator.safeParse(input)
+
+    if (result.success) {
+      mutate({ content: input })
+      return
+    }
+
+    const error = result.error.issues[0]
+    if (!error?.message) toast.error("Failed to post! Please try again later")
+    else toast.error(error.message)
+  }
+
+  if (!user || !user.username) return null
 
   return (
     <div className="flex gap-3 w-full">
-      <Image
-        src={user.profileImageUrl}
-        alt="profile picture"
-        className="w-14 h-14 rounded-full"
-        width={56}
-        height={56}
-      />
+      <Link href={"/@" + user.username}>
+        <Image
+          src={user.profileImageUrl}
+          alt="profile picture"
+          className="w-14 h-14 rounded-full"
+          width={56}
+          height={56}
+        />
+      </Link>
       <input
         type="text"
         placeholder="Type some emojis!"
@@ -49,13 +66,13 @@ const CreatePostWizard = () => {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault()
-            if (input !== "") mutate({ content: input })
+            handleSubmit()
           }
         }}
         disabled={isPosting}
       />
       {input !== "" && !isPosting && (
-        <button onClick={() => mutate({ content: input })} disabled={isPosting}>
+        <button onClick={handleSubmit} disabled={isPosting}>
           Post
         </button>
       )}

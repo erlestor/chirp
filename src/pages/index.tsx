@@ -85,12 +85,10 @@ const CreatePostWizard = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser()
-
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
+  const { user, isLoaded: userLoaded, isSignedIn } = useUser()
 
   // Return empty div if user is not loaded, caching makes sure we dont fetch twice
-  if (!userLoaded) return <div />
+  if (!userLoaded || !user) return <div />
 
   return (
     <>
@@ -103,7 +101,7 @@ const Home: NextPage = () => {
           )}
           {isSignedIn && <CreatePostWizard />}
         </div>
-        <Feed data={data} isLoading={postsLoading} />
+        <Feed />
       </PageLayout>
     </>
   )

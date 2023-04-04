@@ -13,8 +13,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   if (!user) return <div>404</div>
 
-  const { data: posts, isLoading } = api.posts.getPostsByUserId.useQuery({ userId: user.id })
-
   return (
     <>
       <Head>
@@ -33,7 +31,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <div className="h-[64px]" />
         <div className="p-4 text-2xl font-bold">{`@${user.username ?? ""}`}</div>
         <div className="border-b border-slate-100 w-full" />
-        <Feed data={posts} isLoading={isLoading} />
+        <Feed authorId={user.id} />
       </PageLayout>
     </>
   )

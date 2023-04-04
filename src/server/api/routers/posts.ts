@@ -59,11 +59,18 @@ export const postsRouter = createTRPCRouter({
   }),
 
   getInfinitePosts: publicProcedure
-    .input(z.object({ limit: z.number().min(1).max(100).nullish(), cursor: z.string().nullish() }))
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+        authorId: z.string().nullish(),
+      })
+    )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 5
-      const { cursor } = input
+      const { cursor, authorId } = input
       // const cursor = "clfwm1b8w000cuyiszq5xuclp" as string
+      console.log(authorId)
 
       const posts = await ctx.prisma.post.findMany({
         take: limit + 1,
@@ -71,6 +78,8 @@ export const postsRouter = createTRPCRouter({
         orderBy: {
           id: "desc",
         },
+        // filtering
+        where: authorId ? { authorId: authorId } : undefined,
       })
 
       let nextCursor: typeof cursor | undefined = undefined

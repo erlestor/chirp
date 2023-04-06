@@ -4,7 +4,7 @@ import { PostView } from "~/components/postview"
 import { api } from "~/utils/api"
 
 export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number }) => {
-  const { data, isLoading, fetchNextPage, hasNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage, refetch } =
     api.posts.getInfinitePosts.useInfiniteQuery(
       {
         limit: limit,
@@ -39,15 +39,19 @@ export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number })
       }
       scrollableTarget="scrollableDiv"
       // below props only if you need pull down functionality
-      // refreshFunction={this.refresh}
-      // pullDownToRefresh
-      // pullDownToRefreshThreshold={50}
-      // pullDownToRefreshContent={
-      //   <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
-      // }
-      // releaseToRefreshContent={
-      //   <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-      // }
+      refreshFunction={refetch}
+      pullDownToRefresh
+      pullDownToRefreshThreshold={50}
+      pullDownToRefreshContent={
+        <div className="flex justify-center w-full text-center text-md">
+          &#8595; Pull down to refresh
+        </div>
+      }
+      releaseToRefreshContent={
+        <div className="flex justify-center w-full text-center text-md">
+          &#8593; Release to refresh
+        </div>
+      }
     >
       {posts.map((fullPost) => (
         <PostView key={fullPost.post.id} {...fullPost} />

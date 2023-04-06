@@ -3,13 +3,11 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import { PostView } from "~/components/postview"
 import { api } from "~/utils/api"
 
-export const Feed = (props: { authorId?: string }) => {
-  const { authorId } = props
-
+export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number }) => {
   const { data, isLoading, fetchNextPage, hasNextPage } =
     api.posts.getInfinitePosts.useInfiniteQuery(
       {
-        limit: 60,
+        limit: limit,
         authorId: authorId,
       },
       {

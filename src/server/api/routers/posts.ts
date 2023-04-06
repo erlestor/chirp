@@ -67,7 +67,7 @@ export const postsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 5
+      const limit = input.limit ?? 50
       const { cursor, authorId } = input
       // const cursor = "clfwm1b8w000cuyiszq5xuclp" as string
       console.log(authorId)

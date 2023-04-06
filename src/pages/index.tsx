@@ -87,6 +87,8 @@ const CreatePostWizard = () => {
 const Home: NextPage = () => {
   const { user, isLoaded: userLoaded, isSignedIn } = useUser()
 
+  api.posts.getInfinitePosts.useInfiniteQuery({}, {})
+
   // Return empty div if user is not loaded, caching makes sure we dont fetch twice
   if (!userLoaded || !user) return <div />
 

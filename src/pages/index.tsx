@@ -9,6 +9,7 @@ import { PageLayout } from "~/components/layout"
 import { emojiValidator } from "~/utils/zodValidators"
 import Link from "next/link"
 import { Feed } from "~/components/feed"
+import Head from "next/head"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -96,6 +97,9 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
+      </Head>
       <PageLayout>
         <div className="border-b border-slate-400 p-4 flex">
           {!isSignedIn && (

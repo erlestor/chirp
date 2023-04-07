@@ -8,11 +8,9 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
 dayjs.extend(relativeTime)
 
-export const PostView = (props: PostWithUser) => {
-  const { post, author } = props
-
+export const PostView = ({ post, author }: PostWithUser) => {
   return (
-    <div key={post.id} className="p-4 border-b border-slate-400 flex gap-3">
+    <div key={post.id} className="p-4 border-b border-slate-400 hover:bg-gray-950 flex gap-3">
       <Link href={`/@${author.username}`}>
         <Image
           src={author.profilePicture}

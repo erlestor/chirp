@@ -14,12 +14,12 @@ const CreatePostWizard = () => {
   const [input, setInput] = useState("")
   const { user } = useUser()
 
-  const ctx = api.useContext()
+  const utils = api.useContext()
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("")
-      void ctx.posts.getAll.invalidate()
+      void utils.posts.getInfinitePosts.invalidate()
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content
@@ -85,12 +85,14 @@ const CreatePostWizard = () => {
 }
 
 const Home: NextPage = () => {
-  const { user, isLoaded: userLoaded, isSignedIn } = useUser()
+  const { isLoaded: userLoaded, isSignedIn } = useUser()
 
+  // prefetch posts for better load time. caching makes sure we dont fetch twice
   api.posts.getInfinitePosts.useInfiniteQuery({}, {})
 
-  // Return empty div if user is not loaded, caching makes sure we dont fetch twice
-  if (!userLoaded || !user) return <div />
+  // Return empty div if user is not loaded, looks better on load
+  // If you're not logged in already you will only see a black screen. Fix this!
+  if (!userLoaded) return <div />
 
   return (
     <>

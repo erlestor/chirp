@@ -37,7 +37,7 @@ export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number })
       endMessage={
         <div className="text-center w-full text-md p-4 text-slate-300">No more posts...</div>
       }
-      scrollableTarget="scrollableDiv"
+      // scrollableTarget="scrollableDiv"
       // below props only if you need pull down functionality
       refreshFunction={refetch}
       pullDownToRefresh

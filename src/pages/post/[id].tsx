@@ -4,6 +4,7 @@ import { api } from "~/utils/api"
 import { PageLayout } from "~/components/layout"
 import { PostView } from "~/components/postview"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
+import { Navbar } from "~/components/navbar"
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
@@ -19,6 +20,7 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
       </Head>
       <PageLayout>
+        <Navbar page="Post" back />
         <PostView {...data} />
       </PageLayout>
     </>

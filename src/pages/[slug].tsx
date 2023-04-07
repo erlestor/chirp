@@ -6,6 +6,7 @@ import Image from "next/image"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Feed } from "~/components/feed"
 import { SignOutButton, useUser } from "@clerk/nextjs"
+import { Navbar } from "~/components/navbar"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data: user } = api.profile.getUserByUsername.useQuery({
@@ -14,7 +15,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   const { user: currentUser } = useUser()
 
-  if (!user) return <div>404</div>
+  if (!user || !user.username) return <div>404</div>
 
   const isCurrentUser = currentUser?.id === user.id
 
@@ -24,6 +25,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <title>{user.username}</title>
       </Head>
       <PageLayout>
+        <Navbar page={user.username} back />
         <div className=" bg-slate-600 h-36 relative">
           <Image
             src={user.profilePicture}

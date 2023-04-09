@@ -5,7 +5,7 @@ import { PageLayout } from "~/components/layout"
 import Image from "next/image"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Feed } from "~/components/feed"
-import { SignOutButton, useUser } from "@clerk/nextjs"
+import { SignOutButton, SignedOut, UserButton, useUser } from "@clerk/nextjs"
 import { Navbar } from "~/components/navbar"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
@@ -35,7 +35,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             className="-mb-[64px] absolute left-0 ml-4 bottom-0 rounded-full border-4 border-black"
           />
         </div>
-        <div className="h-32" />
+        <div className="h-24" />
+        <SignOutButton />
         <div className="p-4 text-2xl font-bold">{`@${user.username ?? ""}`}</div>
         <div className="border-b border-slate-100 w-full" />
         <Feed authorId={user.id} />

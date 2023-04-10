@@ -4,7 +4,7 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import Image from "next/image"
 import Link from "next/link"
 
-type PostWithUser = RouterOutputs["posts"]["getAll"][number]
+type PostWithUser = RouterOutputs["posts"]["getInfinitePosts"]["posts"][0]
 
 dayjs.extend(relativeTime)
 

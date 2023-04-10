@@ -1,4 +1,4 @@
-import { SignInButton, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import { type NextPage } from "next"
 import { api } from "~/utils/api"
 import Image from "next/image"
@@ -35,14 +35,14 @@ const CreatePostWizard = () => {
   const handleSubmit = () => {
     const result = emojiValidator.safeParse(input)
 
-    if (result.success) {
-      mutate({ content: input })
+    if (!result.success) {
+      const error = result.error.issues[0]
+      if (!error?.message) toast.error("Failed to post! Please try again later")
+      else toast.error(error.message)
       return
     }
 
-    const error = result.error.issues[0]
-    if (!error?.message) toast.error("Failed to post! Please try again later")
-    else toast.error(error.message)
+    mutate({ content: input })
   }
 
   if (!user || !user.username) return <div />
@@ -89,7 +89,7 @@ const CreatePostWizard = () => {
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser()
 
-  // prefetch posts for better load time. caching makes sure we dont fetch twice
+  // start fetching posts for better load time. caching
   api.posts.getInfinitePosts.useInfiniteQuery({}, {})
 
   // Return empty div if user is not loaded, looks better on load

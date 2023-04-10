@@ -1,4 +1,5 @@
-import { SignIn, SignInButton, useUser } from "@clerk/nextjs"
+/* eslint-disable react/no-unescaped-entities */
+import { SignInButton, useUser } from "@clerk/nextjs"
 import type { PropsWithChildren } from "react"
 
 export const PageLayout = (props: PropsWithChildren) => {
@@ -10,7 +11,7 @@ export const PageLayout = (props: PropsWithChildren) => {
         {props.children}
       </div>
       {isLoaded && !isSignedIn && (
-        <div className="absolute bottom-0 p-4 bg-black w-full justify-center flex gap-4">
+        <div className="fixed bottom-0 p-4 bg-black w-full justify-center flex gap-4">
           <div className="text-xl">Don't miss what's happening</div>
           <SignInButton />
         </div>

@@ -25,7 +25,6 @@ export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number })
     <InfiniteScroll
       dataLength={posts.length} //This is important field to render the next data
       next={() => {
-        console.log("fetching next page")
         void fetchNextPage()
       }}
       hasMore={hasNextPage ?? true}

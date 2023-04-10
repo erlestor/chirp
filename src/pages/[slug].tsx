@@ -5,7 +5,7 @@ import { PageLayout } from "~/components/layout"
 import Image from "next/image"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Feed } from "~/components/feed"
-import { SignOutButton, SignedOut, UserButton, useUser } from "@clerk/nextjs"
+import { SignOutButton } from "@clerk/nextjs"
 import { Navbar } from "~/components/navbar"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
@@ -13,11 +13,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     username,
   })
 
-  const { user: currentUser } = useUser()
-
   if (!user || !user.username) return <div>404</div>
-
-  const isCurrentUser = currentUser?.id === user.id
 
   return (
     <>
@@ -33,6 +29,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             width={128}
             height={128}
             className="-mb-[64px] absolute left-0 ml-4 bottom-0 rounded-full border-4 border-black"
+            priority
           />
         </div>
         <div className="h-24" />

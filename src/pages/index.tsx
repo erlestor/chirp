@@ -104,11 +104,6 @@ const Home: NextPage = () => {
       <PageLayout>
         <Navbar page="Home" />
         <div className="border-b border-slate-400 p-4 flex">
-          {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
-          )}
           {isSignedIn && <CreatePostWizard />}
         </div>
         <Feed />

@@ -2,11 +2,10 @@ import { clerkClient } from "@clerk/nextjs/server"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { createTRPCRouter, publicProcedure, privateProcedure } from "~/server/api/trpc"
-import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
-import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "../helpers/filterUserForClient"
 import type { Post } from "@prisma/client"
 import { emojiValidator } from "~/utils/zodValidators"
+import { ratelimit } from "../helpers/ratelimit"
 
 const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
@@ -25,14 +24,6 @@ const addUserDataToPosts = async (posts: Post[]) => {
     return { post, author: { ...author, username: author.username } }
   })
 }
-
-// Create a new ratelimiter, that allows 3 requests per 1 minute
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(3, "1 m"),
-  analytics: true,
-  prefix: "@upstash/ratelimit",
-})
 
 export const postsRouter = createTRPCRouter({
   getById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
@@ -70,7 +61,6 @@ export const postsRouter = createTRPCRouter({
       const limit = input.limit ?? 50
       const { cursor, authorId } = input
       // const cursor = "clfwm1b8w000cuyiszq5xuclp" as string
-      console.log(authorId)
 
       const posts = await ctx.prisma.post.findMany({
         take: limit + 1,

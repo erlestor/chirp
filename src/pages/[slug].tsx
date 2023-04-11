@@ -72,7 +72,14 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <title>{user.username}</title>
       </Head>
       <PageLayout>
-        <Navbar page={user.username} back />
+        <Navbar
+          page={
+            <>
+              <div>{user.username}</div>
+            </>
+          }
+          back
+        />
         <div className=" bg-slate-600 h-36 relative">
           <Image
             src={user.profilePicture}
@@ -104,7 +111,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                   Unfollow
                 </button>
               )}
-              {isLoading && (
+              {!isCurrentUser && isLoading && (
                 <div className="p-4 flex items-center justify-center">
                   <LoadingSpinner size={20} />
                 </div>
@@ -112,7 +119,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             </>
           )}
         </div>
-        <div className="border-b border-slate-100 w-full" />
+        <div className="border-b border-slate-600 w-full" />
         <Feed authorId={user.id} />
       </PageLayout>
     </>

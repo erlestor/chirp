@@ -1,15 +1,26 @@
 import Link from "next/link"
 import { BsArrowLeftShort } from "react-icons/bs"
 
-export const Navbar = ({ page, back }: { page: string; back?: boolean }) => {
+export const Navbar = ({
+  page,
+  back,
+  children,
+}: {
+  page: string | React.ReactNode
+  back?: boolean
+  children?: React.ReactNode
+}) => {
   return (
-    <div className="p-4 sticky top-0 bg-black bg-opacity-50 backdrop-blur-sm flex gap-2 align-center">
-      {back && (
-        <Link href="/" className="rounded-full hover:bg-gray-900">
-          <BsArrowLeftShort size={30} />
-        </Link>
-      )}
-      <div className="text-xl font-bold ">{page}</div>
+    <div className="sticky top-0 bg-black bg-opacity-70 backdrop-blur-md">
+      <div className="p-4 flex gap-2">
+        {back && (
+          <Link href="/" className="rounded-full hover:bg-gray-900">
+            <BsArrowLeftShort size={30} />
+          </Link>
+        )}
+        <div className="text-xl font-bold ">{page}</div>
+      </div>
+      {children}
     </div>
   )
 }

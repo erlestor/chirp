@@ -5,3 +5,7 @@
 body {
   @apply bg-black text-slate-100 overscroll-none overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-800;
 }
+
+* {
+  @apply select-none;
+}

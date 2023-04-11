@@ -11,21 +11,38 @@ datasource db {
     relationMode = "prisma"
 }
 
+model User {
+    id             String @id
+    username       String
+    profilePicture String
+
+    posts Post[]
+
+    followers Follow[] @relation("Followers")
+    following Follow[] @relation("Following")
+
+    @@index([id])
+}
+
 model Post {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
     content  String @db.VarChar(255)
     authorId String
+    author   User   @relation(fields: [authorId], references: [id])
 
     @@index([authorId])
 }
 
 model Follow {
-    followerId String
-    followedId String
+    followerId  String
+    followingId String
 
-    @@id([followerId, followedId])
+    follower  User @relation("Followers", fields: [followerId], references: [id])
+    following User @relation("Following", fields: [followingId], references: [id])
+
+    @@id([followerId, followingId])
     @@index([followerId])
-    @@index([followedId])
+    @@index([followingId])
 }

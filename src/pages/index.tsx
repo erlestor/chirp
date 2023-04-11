@@ -87,7 +87,9 @@ const CreatePostWizard = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser()
+  const { isLoaded: userLoaded, isSignedIn, user } = useUser()
+  console.log(user)
+  const [page, setPage] = useState<"For you" | "Following">("For you")
 
   // start fetching posts for better load time. caching
   api.posts.getInfinitePosts.useInfiniteQuery({}, {})
@@ -102,11 +104,40 @@ const Home: NextPage = () => {
         <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
       </Head>
       <PageLayout>
-        <Navbar page="Home" />
-        <div className="border-b border-slate-400 p-4 flex">
+        <Navbar page="Home">
+          <div className="pt-3 flex border-b border-slate-600">
+            <button
+              className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+              onClick={() => setPage("For you")}
+            >
+              <div
+                className={`pb-3 ${
+                  page === "For you" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
+                }
+              `}
+              >
+                For you
+              </div>
+            </button>
+            <button
+              className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+              onClick={() => setPage("Following")}
+            >
+              <div
+                className={`pb-3 ${
+                  page === "Following" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
+                }
+              `}
+              >
+                Following
+              </div>
+            </button>
+          </div>
+        </Navbar>
+        <div className="border-b border-slate-600 p-4 flex">
           {isSignedIn && <CreatePostWizard />}
         </div>
-        <Feed />
+        <Feed followingOnly={page === "Following"} />
       </PageLayout>
     </>
   )

@@ -1,12 +1,13 @@
 import { clerkClient } from "@clerk/nextjs/server"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure, privateProcedure } from "~/server/api/trpc"
-import { filterUserForClient } from "../helpers/filterUserForClient"
-import type { Post } from "@prisma/client"
+import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"
 import { emojiValidator } from "~/utils/zodValidators"
+
+import { filterUserForClient } from "../helpers/filterUserForClient"
 import { ratelimit } from "../helpers/ratelimit"
 
+import type { Post } from "@prisma/client"
 const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({
@@ -55,12 +56,20 @@ export const postsRouter = createTRPCRouter({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
         authorId: z.string().nullish(),
+        followingOnly: z.boolean().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50
-      const { cursor, authorId } = input
-      // const cursor = "clfwm1b8w000cuyiszq5xuclp" as string
+      const { cursor, authorId, followingOnly } = input
+
+      const authorFilter = authorId ? { authorId: authorId } : {}
+      const followFilter = followingOnly ? { following: { some: { id: ctx.userId } } } : {}
+      const filter = { ...authorFilter, ...followFilter }
+
+      // vil hent ut posts der det finnes en follow med followerId lik ctx.userId og followedId lik authorId
+      // treng da relation post n->1 user, user 2->n follow
+      // første steg blir da å sørg for at æ lagre users på egen database i tillegg te clerk
 
       const posts = await ctx.prisma.post.findMany({
         take: limit + 1,

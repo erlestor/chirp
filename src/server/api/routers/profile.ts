@@ -19,6 +19,22 @@ export const profileRouter = createTRPCRouter({
       return filterUserForClient(user)
     }),
 
+  createUser: privateProcedure.query(async ({ ctx, input }) => {
+    const user = ctx.user
+
+    if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "User not found" })
+
+    const prismaUser = await ctx.prisma.user.create({
+      data: {
+        id: user.id,
+        username: user.username!,
+        profilePicture: user.profilePicture,
+      },
+    })
+
+    return prismaUser
+  }),
+
   isFollowing: privateProcedure
     .input(z.object({ followedId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -26,9 +42,9 @@ export const profileRouter = createTRPCRouter({
 
       const follow = await ctx.prisma.follow.findUnique({
         where: {
-          followerId_followedId: {
+          followerId_followingId: {
             followerId: userId,
-            followedId: input.followedId,
+            followingId: input.followedId,
           },
         },
       })
@@ -47,7 +63,7 @@ export const profileRouter = createTRPCRouter({
       const follow = await ctx.prisma.follow.create({
         data: {
           followerId: userId,
-          followedId: input.followedId,
+          followingId: input.followedId,
         },
       })
       return follow
@@ -64,9 +80,9 @@ export const profileRouter = createTRPCRouter({
 
       const unfollow = await ctx.prisma.follow.delete({
         where: {
-          followerId_followedId: {
+          followerId_followingId: {
             followerId: userId,
-            followedId: input.followedId,
+            followingId: input.followedId,
           },
         },
       })

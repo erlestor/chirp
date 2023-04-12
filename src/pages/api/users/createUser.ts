@@ -10,9 +10,9 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const caller = appRouter.createCaller(ctx)
 
   try {
-    const { id, username, profilePicture } = req.query
+    const { id, username, profilePicture } = req.body.data
 
-    console.log(req.query)
+    console.log(req.body)
 
     if (typeof id !== "string") throw new Error("id must be a string")
     if (typeof username !== "string") throw new Error("username must be a string")

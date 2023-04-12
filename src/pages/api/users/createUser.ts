@@ -3,6 +3,13 @@ import { appRouter } from "../../../server/api/root"
 import { createTRPCContext } from "../../../server/api/trpc"
 import { TRPCError } from "@trpc/server"
 import { getHTTPStatusCodeFromError } from "@trpc/server/http"
+import { userValidator } from "~/utils/zodValidators"
+
+interface IUser {
+  id: string
+  username: string
+  profilePicture: string
+}
 
 const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Create context and caller
@@ -10,9 +17,10 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const caller = appRouter.createCaller(ctx)
 
   try {
-    const { id, username, profilePicture } = req.body.data
+    throw new Error(JSON.stringify(req.body))
+    if (req.method !== "POST") throw new Error("Method not allowed. Must be POST")
 
-    console.log(req.body)
+    const { id, username, profilePicture } = userValidator.parse(req.body.data)
 
     if (typeof id !== "string") throw new Error("id must be a string")
     if (typeof username !== "string") throw new Error("username must be a string")

@@ -18,7 +18,7 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (typeof username !== "string") throw new Error("username must be a string")
     if (typeof profilePicture !== "string") throw new Error("profilePicture must be a string")
 
-    // const user = await caller.profile.createUser({ id, username, profilePicture })
+    const user = await caller.profile.createUser({ id, username, profilePicture })
     res.status(200).json({}) // replace with user
   } catch (cause) {
     if (cause instanceof TRPCError) {

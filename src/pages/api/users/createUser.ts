@@ -28,7 +28,7 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     // Another error occured
     console.error(cause)
-    res.status(500).json({ message: "Internal server error" })
+    res.status(500).json({ message: cause ?? "Internal server error" })
   }
 }
 

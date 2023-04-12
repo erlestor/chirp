@@ -19,21 +19,21 @@ export const profileRouter = createTRPCRouter({
       return filterUserForClient(user)
     }),
 
-  createUser: privateProcedure.query(async ({ ctx, input }) => {
-    const user = ctx.user
+  createUser: privateProcedure
+    .input(z.object({ id: z.string(), username: z.string(), profilePicture: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { id, username, profilePicture } = input
 
-    if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "User not found" })
+      const prismaUser = await ctx.prisma.user.create({
+        data: {
+          id,
+          username,
+          profilePicture,
+        },
+      })
 
-    const prismaUser = await ctx.prisma.user.create({
-      data: {
-        id: user.id,
-        username: user.username!,
-        profilePicture: user.profilePicture,
-      },
-    })
-
-    return prismaUser
-  }),
+      return prismaUser
+    }),
 
   isFollowing: privateProcedure
     .input(z.object({ followedId: z.string() }))

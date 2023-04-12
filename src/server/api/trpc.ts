@@ -29,13 +29,14 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const sesh = getAuth(req)
 
   const userId = sesh.userId
-  const seshUser = sesh.user
-  const user = seshUser ? filterUserForClient(seshUser) : null
+  // const seshUser = sesh.user
+  // only needed if Im going to use webhooks right
+  // const user = seshUser ? filterUserForClient(seshUser) : null
 
   return {
     prisma,
     userId,
-    user,
+    // user,
   }
 }
 

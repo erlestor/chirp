@@ -5,6 +5,7 @@ import { z } from "zod"
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"
 import { filterUserForClient } from "../helpers/filterUserForClient"
 import { ratelimit } from "../helpers/ratelimit"
+import { userValidator } from "~/utils/zodValidators"
 
 export const profileRouter = createTRPCRouter({
   getUserByUsername: publicProcedure
@@ -19,21 +20,19 @@ export const profileRouter = createTRPCRouter({
       return filterUserForClient(user)
     }),
 
-  createUser: publicProcedure
-    .input(z.object({ id: z.string(), username: z.string(), profilePicture: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { id, username, profilePicture } = input
+  createUser: publicProcedure.input(userValidator).query(async ({ ctx, input }) => {
+    const { id, username, profilePicture } = input
 
-      const prismaUser = await ctx.prisma.user.create({
-        data: {
-          id,
-          username,
-          profilePicture,
-        },
-      })
+    const prismaUser = await ctx.prisma.user.create({
+      data: {
+        id,
+        username,
+        profilePicture,
+      },
+    })
 
-      return prismaUser
-    }),
+    return prismaUser
+  }),
 
   isFollowing: privateProcedure
     .input(z.object({ followedId: z.string() }))

@@ -19,7 +19,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["images.clerk.dev", "gravatar.com"],
+    domains: ["images.clerk.dev", "gravatar.com", "www.gravatar.com"],
   },
 
   typescript: {

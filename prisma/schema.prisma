@@ -18,8 +18,8 @@ model User {
 
     posts Post[]
 
-    followers Follow[] @relation("Followers")
-    following Follow[] @relation("Following")
+    followedBy Follow[] @relation("following")
+    following  Follow[] @relation("follower")
 
     @@index([id])
 }
@@ -36,11 +36,11 @@ model Post {
 }
 
 model Follow {
-    followerId  String
-    followingId String
+    followerId String
+    follower   User   @relation("follower", fields: [followerId], references: [id])
 
-    follower  User @relation("Followers", fields: [followerId], references: [id])
-    following User @relation("Following", fields: [followingId], references: [id])
+    followingId String
+    following   User   @relation("following", fields: [followingId], references: [id])
 
     @@id([followerId, followingId])
     @@index([followerId])

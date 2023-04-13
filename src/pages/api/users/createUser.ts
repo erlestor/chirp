@@ -3,7 +3,7 @@ import { appRouter } from "../../../server/api/root"
 import { createTRPCContext } from "../../../server/api/trpc"
 import { TRPCError } from "@trpc/server"
 import { getHTTPStatusCodeFromError } from "@trpc/server/http"
-import { z } from "zod"
+import { ZodError, z } from "zod"
 
 const bodyValidator = z.object({
   data: z.object({
@@ -24,17 +24,21 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const body = bodyValidator.parse(req.body)
     const { id, username, profile_image_url: profilePicture } = body.data
 
-    if (typeof id !== "string") throw new Error("id must be a string")
-    if (typeof username !== "string") throw new Error("username must be a string")
-    if (typeof profilePicture !== "string") throw new Error("profilePicture must be a string")
+    const existingUser = await caller.profile.getUserByUsername({ username })
+    if (existingUser) throw new Error("User already exists")
 
     const user = await caller.profile.createUser({ id, username, profilePicture })
-    res.status(200).json(user) // replace with user
+    res.status(200).json(user)
   } catch (cause) {
     if (cause instanceof TRPCError) {
       // An error from tRPC occured
       const httpCode = getHTTPStatusCodeFromError(cause)
       return res.status(httpCode).json(cause)
+    }
+
+    if (cause instanceof ZodError) {
+      // An error from zod occured
+      return res.status(400).json({ message: cause.message })
     }
     // Another error occured
     console.error(cause)

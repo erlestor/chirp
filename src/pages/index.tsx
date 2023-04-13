@@ -134,9 +134,11 @@ const Home: NextPage = () => {
             </button>
           </div>
         </Navbar>
-        <div className="border-b border-slate-600 p-4 flex">
-          {isSignedIn && <CreatePostWizard />}
-        </div>
+        {isSignedIn && (
+          <div className="border-b border-slate-600 p-4 flex">
+            <CreatePostWizard />
+          </div>
+        )}
         <Feed followingOnly={page === "Following"} />
       </PageLayout>
     </>

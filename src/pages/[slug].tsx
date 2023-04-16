@@ -5,12 +5,17 @@ import { PageLayout } from "~/components/layout"
 import Image from "next/image"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Feed } from "~/components/feed"
-import { SignOutButton, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import { Navbar } from "~/components/navbar"
 import { LoadingSpinner } from "~/components/loading"
 import { toast } from "react-hot-toast"
+import { useState } from "react"
+import { Button } from "~/components/button"
+import { SignOutButton } from "~/components/SignOutButton"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
+  const [followingText, setFollowingText] = useState<"Following" | "Unfollow">("Following")
+
   const { isSignedIn, user: currentUser } = useUser()
 
   const { data: user } = api.profile.getUserByUsername.useQuery({
@@ -96,20 +101,26 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           {isSignedIn && (
             <>
               {isCurrentUser && (
-                <div className="px-4">
+                <div className="m-4">
                   <SignOutButton />
                 </div>
               )}
               {!isLoading && !isCurrentUser && !isFollowing && (
-                <button className="p-4" onClick={handleFollow} disabled={isLoading}>
+                <Button className="m-4" onClick={handleFollow} disabled={isLoading}>
                   Follow
-                </button>
+                </Button>
               )}
               {/* TODO: replace false with if the user is already following */}
               {!isLoading && !isCurrentUser && isFollowing && (
-                <button className="p-4" onClick={handleUnfollow} disabled={isLoading}>
-                  Unfollow
-                </button>
+                <Button
+                  className="m-4 hover:text-red-700 hover:border-red-700"
+                  onClick={handleUnfollow}
+                  onMouseEnter={() => setFollowingText("Unfollow")}
+                  onMouseLeave={() => setFollowingText("Following")}
+                  disabled={isLoading}
+                >
+                  {followingText}
+                </Button>
               )}
               {!isCurrentUser && isLoading && (
                 <div className="p-4 flex items-center justify-center">

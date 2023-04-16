@@ -11,6 +11,7 @@ import Link from "next/link"
 import { Feed } from "~/components/feed"
 import Head from "next/head"
 import { Navbar } from "~/components/navbar"
+import { Button } from "~/components/button"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -73,9 +74,9 @@ const CreatePostWizard = () => {
         disabled={isPosting}
       />
       {input !== "" && !isPosting && (
-        <button onClick={handleSubmit} disabled={isPosting}>
+        <Button onClick={handleSubmit} disabled={isPosting}>
           Post
-        </button>
+        </Button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">
@@ -109,7 +110,7 @@ const Home: NextPage = () => {
           {isSignedIn && (
             <div className="pt-3 flex border-b border-slate-600">
               <button
-                className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                className={` text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
                 onClick={() => setPage("For you")}
               >
                 <div
@@ -122,7 +123,7 @@ const Home: NextPage = () => {
                 </div>
               </button>
               <button
-                className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                className={` text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
                 onClick={() => setPage("Following")}
               >
                 <div

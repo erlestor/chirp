@@ -24,9 +24,6 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const body = bodyValidator.parse(req.body)
     const { id, username, profile_image_url: profilePicture } = body.data
 
-    const existingUser = await caller.profile.getUserByUsername({ username })
-    if (existingUser) throw new Error("User already exists")
-
     const user = await caller.profile.createUser({ id, username, profilePicture })
     res.status(200).json(user)
   } catch (cause) {

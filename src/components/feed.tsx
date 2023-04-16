@@ -12,17 +12,17 @@ export const Feed = ({
   limit?: number
   followingOnly?: boolean
 }) => {
-  const { data, isLoading, fetchNextPage, hasNextPage, refetch } =
-    api.posts.getInfinitePosts.useInfiniteQuery(
-      {
-        limit: limit,
-        authorId,
-        followingOnly,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-      }
-    )
+  // this is so ugly man wtf
+
+  const query = followingOnly && !authorId ? api.posts.getInfiniteFollowing : api.posts.getInfinite
+  const additionalOptions = authorId ? { authorId: authorId } : {}
+
+  const { data, isLoading, fetchNextPage, hasNextPage, refetch } = query.useInfiniteQuery(
+    { limit: limit, ...additionalOptions },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  )
 
   if (isLoading) return <LoadingPage />
 
@@ -32,7 +32,7 @@ export const Feed = ({
 
   return (
     <InfiniteScroll
-      dataLength={posts.length} //This is important field to render the next data
+      dataLength={posts.length} // Required field to render the next data
       next={() => {
         void fetchNextPage()
       }}

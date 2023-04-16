@@ -11,7 +11,7 @@ export const Navbar = ({
   children?: React.ReactNode
 }) => {
   return (
-    <div className="sticky top-0 bg-black bg-opacity-70 backdrop-blur-md">
+    <div className="sticky top-0 bg-black bg-opacity-70 backdrop-blur-md z-10">
       <div className="p-4 flex gap-2">
         {back && (
           <Link href="/" className="rounded-full hover:bg-gray-900">

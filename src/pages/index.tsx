@@ -21,7 +21,7 @@ const CreatePostWizard = () => {
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("")
-      void utils.posts.getInfinitePosts.invalidate()
+      void utils.posts.getInfinite.invalidate()
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content
@@ -92,7 +92,8 @@ const Home: NextPage = () => {
   const [page, setPage] = useState<"For you" | "Following">("For you")
 
   // start fetching posts for better load time. caching
-  api.posts.getInfinitePosts.useInfiniteQuery({}, {})
+  api.posts.getInfinite.useInfiniteQuery({}, {})
+  api.posts.getInfiniteFollowing.useInfiniteQuery({}, {})
 
   // Return empty div if user is not loaded, looks better on load
   // If you're not logged in already you will only see a black screen. Fix this!
@@ -105,34 +106,38 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <Navbar page="Home">
-          <div className="pt-3 flex border-b border-slate-600">
-            <button
-              className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
-              onClick={() => setPage("For you")}
-            >
-              <div
-                className={`pb-3 ${
-                  page === "For you" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
-                }
-              `}
+          {isSignedIn && (
+            <div className="pt-3 flex border-b border-slate-600">
+              <button
+                className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                onClick={() => setPage("For you")}
               >
-                For you
-              </div>
-            </button>
-            <button
-              className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
-              onClick={() => setPage("Following")}
-            >
-              <div
-                className={`pb-3 ${
-                  page === "Following" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
-                }
+                <div
+                  className={`pb-3 ${
+                    page === "For you" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
+                  }
               `}
+                >
+                  For you
+                </div>
+              </button>
+              <button
+                className={`text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                onClick={() => setPage("Following")}
               >
-                Following
-              </div>
-            </button>
-          </div>
+                <div
+                  className={`pb-3 ${
+                    page === "Following"
+                      ? "text-slate-100 border-b-4 border-blue-500 font-bold"
+                      : ""
+                  }
+              `}
+                >
+                  Following
+                </div>
+              </button>
+            </div>
+          )}
         </Navbar>
         {isSignedIn && (
           <div className="border-b border-slate-600 p-4 flex">

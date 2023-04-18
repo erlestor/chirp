@@ -7,7 +7,7 @@ export const PageLayout = (props: PropsWithChildren) => {
 
   return (
     <main className="flex flex-col items-center min-h-screen">
-      <div className="w-full md:max-w-2xl border-x border-slate-600 min-h-screen">
+      <div className="w-full md:max-w-2xl md:border-x border-slate-600 min-h-screen">
         {props.children}
       </div>
       {isLoaded && !isSignedIn && (

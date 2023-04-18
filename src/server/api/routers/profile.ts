@@ -47,7 +47,7 @@ export const profileRouter = createTRPCRouter({
           },
         },
       })
-      return follow
+      return !!follow
     }),
 
   followUser: privateProcedure

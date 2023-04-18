@@ -31,15 +31,25 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const utils = api.useContext()
 
   const { mutate: mutateFollow, isLoading: followLoading } = api.profile.followUser.useMutation({
-    onSuccess: () => {
-      void utils.profile.isFollowing.invalidate()
+    onMutate: async () => {
+      await utils.profile.isFollowing.cancel()
+      const wasFollowing = utils.profile.isFollowing.getData()
+      // optimist update
+      utils.profile.isFollowing.setData({ followedId: user.id }, () => !wasFollowing)
+
+      return { wasFollowing }
     },
-    onError: (e) => {
+    onError: (e, data, ctx) => {
+      // if mutation fails, use context value from mutate, aka previous value
+      utils.profile.isFollowing.setData({ followedId: user.id }, () => ctx?.wasFollowing)
       const errorMessage = e.data?.zodError?.fieldErrors.content
       if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
       else {
         toast.error("Failed to follow! Please try again later")
       }
+    },
+    onSettled: () => {
+      void utils.profile.isFollowing.invalidate()
     },
   })
 
@@ -113,7 +123,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
               {/* TODO: replace false with if the user is already following */}
               {!isLoading && !isCurrentUser && isFollowing && (
                 <Button
-                  className="m-4 hover:text-red-700 hover:border-red-700"
+                  className="w-[105px] m-4 hover:text-red-700 hover:border-red-700"
                   onClick={handleUnfollow}
                   onMouseEnter={() => setFollowingText("Unfollow")}
                   onMouseLeave={() => setFollowingText("Following")}

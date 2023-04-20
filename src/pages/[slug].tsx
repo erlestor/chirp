@@ -95,18 +95,18 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           }
           back
         />
-        <div className=" bg-slate-600 h-36 relative">
+        <div className=" relative h-36 bg-slate-600">
           <Image
             src={user.profilePicture}
             alt="profile"
             width={128}
             height={128}
-            className="-mb-[64px] absolute left-0 ml-4 bottom-0 rounded-full border-4 border-black"
+            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black"
             priority
           />
         </div>
         <div className="h-24" />
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="p-4 text-2xl font-bold">{`@${user.username ?? ""}`}</div>
           {isSignedIn && (
             <>
@@ -123,7 +123,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
               {/* TODO: replace false with if the user is already following */}
               {!isLoading && !isCurrentUser && isFollowing && (
                 <Button
-                  className="w-[105px] m-4 hover:text-red-700 hover:border-red-700"
+                  className="m-4 w-[105px] hover:border-red-700 hover:text-red-700"
                   onClick={handleUnfollow}
                   onMouseEnter={() => setFollowingText("Unfollow")}
                   onMouseLeave={() => setFollowingText("Following")}
@@ -133,14 +133,14 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                 </Button>
               )}
               {!isCurrentUser && isLoading && (
-                <div className="p-4 flex items-center justify-center">
+                <div className="flex items-center justify-center p-4">
                   <LoadingSpinner size={20} />
                 </div>
               )}
             </>
           )}
         </div>
-        <div className="border-b border-slate-600 w-full" />
+        <div className="w-full border-b border-slate-600" />
         <Feed authorId={user.id} />
       </PageLayout>
     </>

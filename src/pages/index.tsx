@@ -12,6 +12,7 @@ import { Feed } from "~/components/feed"
 import Head from "next/head"
 import { Navbar } from "~/components/navbar"
 import { Button } from "~/components/button"
+import { LogoPage } from "~/components/logo"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -49,12 +50,12 @@ const CreatePostWizard = () => {
   if (!user || !user.username) return <div />
 
   return (
-    <div className="flex gap-3 w-full">
+    <div className="flex w-full gap-3">
       <Link href={"/@" + user.username}>
         <Image
           src={user.profileImageUrl}
           alt="profile picture"
-          className="w-14 h-14 rounded-full"
+          className="h-14 w-14 rounded-full"
           width={56}
           height={56}
         />
@@ -98,7 +99,7 @@ const Home: NextPage = () => {
 
   // Return empty div if user is not loaded, looks better on load
   // If you're not logged in already you will only see a black screen. Fix this!
-  if (!userLoaded) return <div />
+  if (!userLoaded) return <LogoPage />
 
   return (
     <>
@@ -108,14 +109,14 @@ const Home: NextPage = () => {
       <PageLayout>
         <Navbar page="Home">
           {isSignedIn && (
-            <div className="pt-3 flex border-b border-slate-600">
+            <div className="flex border-b border-slate-600 pt-3">
               <button
-                className={` text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                className={`flex w-1/2 grow justify-center pt-3 pt-3 text-center text-slate-400 hover:bg-slate-900`}
                 onClick={() => setPage("For you")}
               >
                 <div
                   className={`pb-3 ${
-                    page === "For you" ? "text-slate-100 border-b-4 border-blue-500 font-bold" : ""
+                    page === "For you" ? "border-b-4 border-blue-500 font-bold text-slate-100" : ""
                   }
               `}
                 >
@@ -123,13 +124,13 @@ const Home: NextPage = () => {
                 </div>
               </button>
               <button
-                className={` text-slate-400 flex grow pt-3 text-center justify-center w-1/2 hover:bg-slate-900`}
+                className={`flex w-1/2 grow justify-center pt-3 text-center text-slate-400 hover:bg-slate-900`}
                 onClick={() => setPage("Following")}
               >
                 <div
                   className={`pb-3 ${
                     page === "Following"
-                      ? "text-slate-100 border-b-4 border-blue-500 font-bold"
+                      ? "border-b-4 border-blue-500 font-bold text-slate-100"
                       : ""
                   }
               `}
@@ -141,7 +142,7 @@ const Home: NextPage = () => {
           )}
         </Navbar>
         {isSignedIn && (
-          <div className="border-b border-slate-600 p-4 flex">
+          <div className="flex border-b border-slate-600 p-4">
             <CreatePostWizard />
           </div>
         )}

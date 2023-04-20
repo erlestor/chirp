@@ -93,7 +93,7 @@ const Home: NextPage = () => {
   console.log(user)
   const [page, setPage] = useState<"For you" | "Following">("For you")
 
-  // start fetching posts for better load time. caching
+  // start fetching posts earlier for better load time. caching
   api.posts.getInfinite.useInfiniteQuery({}, {})
   api.posts.getInfiniteFollowing.useInfiniteQuery({}, {})
 

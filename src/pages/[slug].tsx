@@ -30,10 +30,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     followedId: user.id,
   })
 
-  const { data: followers, isLoading: followersLoading } = api.profile.getFollowers.useQuery({
-    userId: user.id,
-  })
-
   const isCurrentUser = currentUser && user.id === currentUser.id
   const isLoading = followLoading || unfollowLoading || isFollowLoading
   const isFollowing = follow
@@ -72,7 +68,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             priority
           />
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex h-20 items-start justify-end">
           {isSignedIn && (
             <>
               {isCurrentUser && (
@@ -85,7 +81,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                   Follow
                 </Button>
               )}
-              {/* TODO: replace false with if the user is already following */}
               {!isLoading && !isCurrentUser && isFollowing && (
                 <Button
                   className="m-4 w-[105px] hover:border-red-700 hover:text-red-700"
@@ -107,12 +102,18 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         </div>
         <div className="flex flex-col gap-1 p-4">
           <div className="text-2xl font-bold">{`@${user.username ?? ""}`}</div>
-          {followers && (
+          <div className="flex gap-5">
             <div className="flex gap-1">
-              <span>{followers.length}</span>
-              <span className="text-dim">Followers</span>
+              <span>{user.following.length}</span>
+              <span className="text-dim">Following</span>
             </div>
-          )}
+            <div className="flex gap-1">
+              <span>{user.followedBy.length}</span>
+              <span className="text-dim">
+                {user.followedBy.length !== 1 ? "Followers" : "Follower"}
+              </span>
+            </div>
+          </div>
         </div>
         <div className="w-full border-b border-slate-600" />
         <Feed authorId={user.id} />

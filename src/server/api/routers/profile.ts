@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"
-import { filterUserForClient } from "../helpers/filterUserForClient"
 import { ratelimit } from "../helpers/ratelimit"
 import { userValidator } from "~/utils/zodValidators"
 
@@ -10,31 +9,26 @@ export const profileRouter = createTRPCRouter({
     .input(z.object({ username: z.string() }))
     .query(async ({ ctx, input }) => {
       const { username } = input
+
       const user = await ctx.prisma.user.findFirst({
         where: { username: username },
-      })
-
-      if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "User not found" })
-
-      return user
-    }),
-
-  getFollowers: publicProcedure
-    .input(z.object({ userId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { userId } = input
-
-      const followers = await ctx.prisma.user.findMany({
-        where: {
+        include: {
+          followedBy: {
+            select: {
+              follower: true,
+            },
+          },
           following: {
-            some: {
-              followingId: userId,
+            select: {
+              following: true,
             },
           },
         },
       })
 
-      return followers
+      if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "User not found" })
+
+      return user
     }),
 
   createUser: publicProcedure.input(userValidator).query(async ({ ctx, input }) => {

@@ -77,7 +77,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                 </div>
               )}
               {!isLoading && !isCurrentUser && !isFollowing && (
-                <Button className="m-4" onClick={handleFollow} disabled={isLoading}>
+                <Button contained className="m-4" onClick={handleFollow} disabled={isLoading}>
                   Follow
                 </Button>
               )}

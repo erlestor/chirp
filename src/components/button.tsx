@@ -7,17 +7,16 @@ export const Button = (props: {
   onMouseEnter?: () => void
   onMouseLeave?: () => void
   disabled?: boolean
+  contained?: boolean
 }) => {
-  const extraClassNames = props.className ?? ""
+  const { contained, className } = props
 
   return (
     <button
       {...props}
-      className={
-        "rounded-full border border-slate-400 px-4 py-1.5 text-center font-semibold" +
-        " " +
-        extraClassNames
-      }
+      className={`rounded-full border border-slate-400 px-4 py-1.5 text-center font-semibold ${
+        contained ? "bg-slate-100 text-black" : ""
+      } ${className ?? ""}`}
     >
       {props.children}
     </button>

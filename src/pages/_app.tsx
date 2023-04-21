@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import { Toaster } from "react-hot-toast"
 import Head from "next/head"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -22,6 +23,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </Head>
       <Toaster position="bottom-center" />
       <Component {...pageProps} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </ClerkProvider>
   )
 }

@@ -55,7 +55,7 @@ const CreatePostWizard = () => {
         <Image
           src={user.profileImageUrl}
           alt="profile picture"
-          className="h-14 w-14 rounded-full"
+          className="h-14 w-14 rounded-full hover:brightness-75"
           width={56}
           height={56}
         />

@@ -10,12 +10,12 @@ dayjs.extend(relativeTime)
 
 export const PostView = ({ post, author }: PostWithUser) => {
   return (
-    <div className="flex border-b border-slate-600 hover:bg-gray-950">
+    <div className="flex border-b border-slate-600">
       <Link className="p-4" href={`/@${author.username}`}>
         <Image
           src={author.profilePicture}
           alt={`@${author.username}'s profile picture`}
-          className="h-14 w-14 rounded-full"
+          className="h-14 w-14 rounded-full hover:brightness-75"
           width={56}
           height={56}
         />

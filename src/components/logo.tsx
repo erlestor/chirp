@@ -1,9 +1,9 @@
-import Image from "next/image"
+import { FaKiwiBird } from "react-icons/fa"
 
 export const LogoPage = () => {
   return (
-    <div className="flex items-center justify-center h-screen w-full">
-      <Image src="/bird.png" alt="bird" width="90" height="50" />
+    <div className="flex h-screen w-full items-center justify-center">
+      <FaKiwiBird size={60} />
     </div>
   )
 }

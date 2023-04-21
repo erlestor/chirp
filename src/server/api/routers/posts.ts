@@ -8,6 +8,7 @@ import { filterUserForClient } from "../helpers/filterUserForClient"
 import { ratelimit } from "../helpers/ratelimit"
 
 import type { Post } from "@prisma/client"
+
 const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({

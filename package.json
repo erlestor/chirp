@@ -27,6 +27,7 @@
     "@upstash/ratelimit": "^0.4.1",
     "@upstash/redis": "^1.20.1",
     "@vercel/og": "^0.5.0",
+    "class-variance-authority": "^0.5.2",
     "csstype": "^3.0.10",
     "dayjs": "^1.11.7",
     "next": "^13.3.0",

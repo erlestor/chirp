@@ -13,7 +13,7 @@ const bodyValidator = z.object({
   }),
 })
 
-const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
   // Create context and caller
   const ctx = createTRPCContext({ req, res })
   const caller = appRouter.createCaller(ctx)
@@ -43,4 +43,4 @@ const userByIdHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-export default userByIdHandler
+export default createUser

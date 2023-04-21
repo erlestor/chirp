@@ -1,10 +1,10 @@
 import type { GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import { api } from "~/utils/api"
-import { PageLayout } from "~/components/layout"
-import { PostView } from "~/components/postview"
+import { PageLayout } from "@ui/layout"
+import { PostView } from "@ui/postview"
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
-import { Navbar } from "~/components/navbar"
+import { Navbar } from "@ui/navbar"
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({

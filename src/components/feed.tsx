@@ -1,6 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component"
-import { LoadingPage, LoadingSpinner } from "~/components/loading"
-import { PostView } from "~/components/postview"
+import { LoadingPage, LoadingSpinner } from "@ui/loading"
+import { PostView } from "@ui/postview"
 import { api } from "~/utils/api"
 
 export const Feed = ({

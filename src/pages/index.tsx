@@ -4,15 +4,15 @@ import { api } from "~/utils/api"
 import Image from "next/image"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
-import { LoadingSpinner } from "../components/loading"
-import { PageLayout } from "~/components/layout"
+import { LoadingSpinner } from "@ui/loading"
+import { PageLayout } from "@ui/layout"
 import { emojiValidator } from "~/utils/zodValidators"
 import Link from "next/link"
-import { Feed } from "~/components/feed"
 import Head from "next/head"
-import { Navbar } from "~/components/navbar"
-import { Button } from "~/components/button"
-import { LogoPage } from "~/components/logo"
+import { Feed } from "@ui/feed"
+import { Navbar } from "@ui/navbar"
+import { Button } from "@ui/button"
+import { LogoPage } from "@ui/logo"
 import { useCreatePost } from "~/utils/hooks"
 
 const CreatePostWizard = () => {
@@ -102,7 +102,7 @@ const Home: NextPage = () => {
           {isSignedIn && (
             <div className="flex border-b border-slate-600 pt-3">
               <button
-                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-dark`}
+                className={`flex w-1/2 grow justify-center pt-3 text-center text-dim hover:bg-dark`}
                 onClick={() => setPage("For you")}
               >
                 <div
@@ -115,7 +115,7 @@ const Home: NextPage = () => {
                 </div>
               </button>
               <button
-                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-dark`}
+                className={`flex w-1/2 grow justify-center pt-3 text-center text-dim hover:bg-dark`}
                 onClick={() => setPage("Following")}
               >
                 <div

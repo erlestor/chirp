@@ -8,15 +8,17 @@ import { Feed } from "~/components/feed"
 import { useUser } from "@clerk/nextjs"
 import { Navbar } from "~/components/navbar"
 import { LoadingSpinner } from "~/components/loading"
-import { toast } from "react-hot-toast"
 import { useState } from "react"
 import { Button } from "~/components/button"
 import { SignOutButton } from "~/components/SignOutButton"
+import { useFollowUser, useUnfollowUser } from "~/utils/hooks"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const [followingText, setFollowingText] = useState<"Following" | "Unfollow">("Following")
-
   const { isSignedIn, user: currentUser } = useUser()
+
+  const { mutate: mutateFollow, isLoading: followLoading } = useFollowUser()
+  const { mutate: mutateUnfollow, isLoading: unfollowLoading } = useUnfollowUser()
 
   const { data: user } = api.profile.getUserByUsername.useQuery({
     username,
@@ -28,58 +30,23 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     followedId: user.id,
   })
 
-  const utils = api.useContext()
-
-  const { mutate: mutateFollow, isLoading: followLoading } = api.profile.followUser.useMutation({
-    onMutate: async () => {
-      await utils.profile.isFollowing.cancel()
-      const wasFollowing = utils.profile.isFollowing.getData()
-      // optimist update
-      utils.profile.isFollowing.setData({ followedId: user.id }, () => !wasFollowing)
-
-      return { wasFollowing }
-    },
-    onError: (e, data, ctx) => {
-      // if mutation fails, use context value from mutate, aka previous value
-      utils.profile.isFollowing.setData({ followedId: user.id }, () => ctx?.wasFollowing)
-      const errorMessage = e.data?.zodError?.fieldErrors.content
-      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
-      else {
-        toast.error("Failed to follow! Please try again later")
-      }
-    },
-    onSettled: () => {
-      void utils.profile.isFollowing.invalidate()
-    },
+  const { data: followers, isLoading: followersLoading } = api.profile.getFollowers.useQuery({
+    userId: user.id,
   })
-
-  const { mutate: mutateUnfollow, isLoading: unfollowLoading } =
-    api.profile.unfollowUser.useMutation({
-      onSuccess: () => {
-        void utils.profile.isFollowing.invalidate()
-      },
-      onError: (e) => {
-        const errorMessage = e.data?.zodError?.fieldErrors.content
-        if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
-        else {
-          toast.error("Failed to unfollow! Please try again later")
-        }
-      },
-    })
-
-  const handleFollow = () => {
-    // TODO: check if user is already following
-    mutateFollow({ followedId: user.id })
-  }
-
-  const handleUnfollow = () => {
-    // TODO: check if user is following
-    mutateUnfollow({ followedId: user.id })
-  }
 
   const isCurrentUser = currentUser && user.id === currentUser.id
   const isLoading = followLoading || unfollowLoading || isFollowLoading
   const isFollowing = follow
+
+  const handleFollow = () => {
+    if (isFollowing) return
+    mutateFollow({ followedId: user.id })
+  }
+
+  const handleUnfollow = () => {
+    if (!isFollowing) return
+    mutateUnfollow({ followedId: user.id })
+  }
 
   return (
     <>
@@ -105,9 +72,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             priority
           />
         </div>
-        <div className="h-24" />
-        <div className="flex items-center justify-between">
-          <div className="p-4 text-2xl font-bold">{`@${user.username ?? ""}`}</div>
+        <div className="flex items-center justify-end">
           {isSignedIn && (
             <>
               {isCurrentUser && (
@@ -138,6 +103,15 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                 </div>
               )}
             </>
+          )}
+        </div>
+        <div className="flex flex-col gap-1 p-4">
+          <div className="text-2xl font-bold">{`@${user.username ?? ""}`}</div>
+          {followers && (
+            <div className="flex gap-1">
+              <span>{followers.length}</span>
+              <span className="text-dim">Followers</span>
+            </div>
           )}
         </div>
         <div className="w-full border-b border-slate-600" />

@@ -1,7 +1,5 @@
-import { clerkClient } from "@clerk/nextjs/server"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"
 import { filterUserForClient } from "../helpers/filterUserForClient"
 import { ratelimit } from "../helpers/ratelimit"
@@ -11,19 +9,38 @@ export const profileRouter = createTRPCRouter({
   getUserByUsername: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ ctx, input }) => {
-      const [user] = await clerkClient.users.getUserList({
-        username: [input.username],
+      const { username } = input
+      const user = await ctx.prisma.user.findFirst({
+        where: { username: username },
       })
 
       if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "User not found" })
 
-      return filterUserForClient(user)
+      return user
+    }),
+
+  getFollowers: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { userId } = input
+
+      const followers = await ctx.prisma.user.findMany({
+        where: {
+          following: {
+            some: {
+              followingId: userId,
+            },
+          },
+        },
+      })
+
+      return followers
     }),
 
   createUser: publicProcedure.input(userValidator).query(async ({ ctx, input }) => {
     const { id, username, profilePicture } = input
 
-    const prismaUser = await ctx.prisma.user.create({
+    const user = await ctx.prisma.user.create({
       data: {
         id,
         username,
@@ -31,8 +48,39 @@ export const profileRouter = createTRPCRouter({
       },
     })
 
-    return prismaUser
+    return user
   }),
+
+  deleteUser: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { userId } = input
+
+      const update = await ctx.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          posts: {
+            deleteMany: {},
+          },
+          following: {
+            deleteMany: {},
+          },
+          followedBy: {
+            deleteMany: {},
+          },
+        },
+      })
+
+      const user = await ctx.prisma.user.delete({
+        where: {
+          id: userId,
+        },
+      })
+
+      return user
+    }),
 
   isFollowing: privateProcedure
     .input(z.object({ followedId: z.string() }))

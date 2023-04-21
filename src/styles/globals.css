@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black text-slate-100 overscroll-none overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-800;
+  @apply overflow-y-auto overscroll-none bg-black text-slate-100 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-800;
 }
 
 * {
   @apply select-none;
+}
+
+.text-dim {
+  @apply text-slate-400;
 }

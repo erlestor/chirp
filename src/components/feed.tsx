@@ -38,25 +38,23 @@ export const Feed = ({
       }}
       hasMore={hasNextPage ?? true}
       loader={
-        <div className="flex justify-center w-full p-4">
+        <div className="flex w-full justify-center p-4">
           <LoadingSpinner size={40} />
         </div>
       }
-      endMessage={
-        <div className="text-center w-full text-md p-4 text-slate-300">No more posts...</div>
-      }
+      endMessage={<div className="text-md text-dim w-full p-4 text-center">No more posts...</div>}
       // scrollableTarget="scrollableDiv"
       // below props only if you need pull down functionality
       refreshFunction={refetch}
       pullDownToRefresh
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={
-        <div className="flex justify-center w-full text-center text-md">
+        <div className="text-md flex w-full justify-center text-center">
           &#8595; Pull down to refresh
         </div>
       }
       releaseToRefreshContent={
-        <div className="flex justify-center w-full text-center text-md">
+        <div className="text-md flex w-full justify-center text-center">
           &#8593; Release to refresh
         </div>
       }

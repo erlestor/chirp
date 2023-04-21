@@ -111,7 +111,7 @@ const Home: NextPage = () => {
           {isSignedIn && (
             <div className="flex border-b border-slate-600 pt-3">
               <button
-                className={`flex w-1/2 grow justify-center pt-3 pt-3 text-center text-slate-400 hover:bg-slate-900`}
+                className={`text-dim flex w-1/2 grow justify-center pt-3 pt-3 text-center hover:bg-slate-900`}
                 onClick={() => setPage("For you")}
               >
                 <div
@@ -124,7 +124,7 @@ const Home: NextPage = () => {
                 </div>
               </button>
               <button
-                className={`flex w-1/2 grow justify-center pt-3 text-center text-slate-400 hover:bg-slate-900`}
+                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-slate-900`}
                 onClick={() => setPage("Following")}
               >
                 <div

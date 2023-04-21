@@ -13,26 +13,13 @@ import Head from "next/head"
 import { Navbar } from "~/components/navbar"
 import { Button } from "~/components/button"
 import { LogoPage } from "~/components/logo"
+import { useCreatePost } from "~/utils/hooks"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
   const { user } = useUser()
 
-  const utils = api.useContext()
-
-  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
-    onSuccess: () => {
-      setInput("")
-      void utils.posts.getInfinite.invalidate()
-    },
-    onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors.content
-      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
-      else {
-        toast.error("Failed to post! Please try again later")
-      }
-    },
-  })
+  const { mutate, isLoading: isPosting } = useCreatePost({ setInput })
 
   const handleSubmit = () => {
     const result = emojiValidator.safeParse(input)
@@ -115,7 +102,7 @@ const Home: NextPage = () => {
           {isSignedIn && (
             <div className="flex border-b border-slate-600 pt-3">
               <button
-                className={`text-dim flex w-1/2 grow justify-center pt-3 pt-3 text-center hover:bg-slate-900`}
+                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-dark`}
                 onClick={() => setPage("For you")}
               >
                 <div
@@ -128,7 +115,7 @@ const Home: NextPage = () => {
                 </div>
               </button>
               <button
-                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-slate-900`}
+                className={`text-dim flex w-1/2 grow justify-center pt-3 text-center hover:bg-dark`}
                 onClick={() => setPage("Following")}
               >
                 <div

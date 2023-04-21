@@ -7,7 +7,7 @@ export const useFollowUser = () => {
   return api.profile.followUser.useMutation({
     onSuccess: () => {
       void utils.profile.isFollowing.invalidate()
-      void utils.profile.getFollowers.invalidate()
+      void utils.profile.getUserByUsername.invalidate()
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content
@@ -25,13 +25,31 @@ export const useUnfollowUser = () => {
   return api.profile.unfollowUser.useMutation({
     onSuccess: () => {
       void utils.profile.isFollowing.invalidate()
-      void utils.profile.getFollowers.invalidate()
+      void utils.profile.getUserByUsername.invalidate()
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content
       if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
       else {
         toast.error("Failed to unfollow! Please try again later")
+      }
+    },
+  })
+}
+
+export const useCreatePost = ({ setInput }: { setInput?: (input: string) => void }) => {
+  const utils = api.useContext()
+
+  return api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput && setInput("")
+      void utils.posts.getInfinite.invalidate()
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content
+      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
+      else {
+        toast.error("Failed to post! Please try again later")
       }
     },
   })

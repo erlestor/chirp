@@ -42,7 +42,7 @@ export const Feed = ({
           <LoadingSpinner size={40} />
         </div>
       }
-      endMessage={<div className="text-md text-dim w-full p-4 text-center">No more posts...</div>}
+      endMessage={<div className="text-md w-full p-4 text-center text-dim">No more posts...</div>}
       // scrollableTarget="scrollableDiv"
       // below props only if you need pull down functionality
       refreshFunction={refetch}

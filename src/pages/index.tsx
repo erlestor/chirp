@@ -74,10 +74,10 @@ const CreatePostWizard = () => {
         }}
         disabled={isPosting}
       />
-      {input !== "" && !isPosting && (
+      {!isPosting && (
         <div className="flex items-center">
           <div>
-            <Button contained className="" onClick={handleSubmit} disabled={isPosting}>
+            <Button contained onClick={handleSubmit} disabled={input === "" || isPosting}>
               Post
             </Button>
           </div>

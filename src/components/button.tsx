@@ -9,14 +9,19 @@ export const Button = (props: {
   disabled?: boolean
   contained?: boolean
 }) => {
-  const { contained, className } = props
+  const { contained, className, disabled } = props
 
   return (
     <button
       {...props}
-      className={`rounded-full border border-slate-400 px-4 py-1.5 text-center font-semibold ${
-        contained ? "bg-slate-100 text-black" : ""
-      } ${className ?? ""}`}
+      className={`
+        rounded-full border border-slate-400 px-4 py-1.5 text-center font-semibold ${
+          contained ? "bg-slate-100 text-black" : " "
+        } 
+        ${contained && !disabled ? " hover:brightness-89" : " "} 
+        ${disabled ? "brightness-50" : " "} 
+        ${className ?? " "}
+      `}
     >
       {props.children}
     </button>

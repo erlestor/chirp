@@ -2,18 +2,12 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import { LoadingPage, LoadingSpinner } from "@ui/loading"
 import { PostView } from "@ui/postview"
 import { api } from "~/utils/api"
+import { useTabContext } from "~/utils/context"
 
-export const Feed = ({
-  authorId,
-  limit,
-  followingOnly,
-}: {
-  authorId?: string
-  limit?: number
-  followingOnly?: boolean
-}) => {
-  // this is so ugly man wtf
+export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number }) => {
+  const { tab } = useTabContext()
 
+  const followingOnly = tab === "Following"
   const query = followingOnly ? api.posts.getInfiniteFollowing : api.posts.getInfinite
 
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = query.useInfiniteQuery(

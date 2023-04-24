@@ -84,8 +84,6 @@ const CreatePostWizard = () => {
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser()
 
-  const { tab } = useTabContext()
-
   // start fetching posts earlier for better load time. caching
   api.posts.getInfinite.useInfiniteQuery({}, {})
   api.posts.getInfiniteFollowing.useInfiniteQuery({}, {})
@@ -106,7 +104,7 @@ const Home: NextPage = () => {
             <CreatePostWizard />
           </div>
         )}
-        <Feed followingOnly={tab === "Following"} />
+        <Feed />
       </PageLayout>
     </>
   )

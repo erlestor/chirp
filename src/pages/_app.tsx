@@ -21,7 +21,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <meta name="description" content="thinking..." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Toaster position="bottom-center" />
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: "#000000",
+            color: "#ffffff",
+            fontFamily: "inter, sans",
+          },
+        }}
+      />
       <Component {...pageProps} />
       <ReactQueryDevtools initialIsOpen={false} />
     </ClerkProvider>

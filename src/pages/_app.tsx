@@ -7,7 +7,7 @@ import { dark } from "@clerk/themes"
 import { Toaster } from "react-hot-toast"
 import Head from "next/head"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import DarkmodeContextProvider from "~/components/darkmodeContextProvider"
+import DarkmodeContextProvider from "~/components/contextProvider"
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (

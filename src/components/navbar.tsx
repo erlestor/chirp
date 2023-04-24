@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { BsArrowLeftShort } from "react-icons/bs"
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md"
-import { useDarkmodeContext, useSetDarkmodeContext } from "~/utils/darkmode"
+import { useDarkmodeContext } from "~/utils/context"
 
 export const Navbar = ({
   page,
@@ -12,8 +12,7 @@ export const Navbar = ({
   back?: boolean
   children?: React.ReactNode
 }) => {
-  const darkmode = useDarkmodeContext()
-  const setDarkmode = useSetDarkmodeContext()
+  const { darkmode, setDarkmode } = useDarkmodeContext()
 
   return (
     <div className="sticky top-0 z-10 bg-opacity-70 backdrop-blur-md">

@@ -15,6 +15,7 @@ import { Button } from "@ui/button"
 import { LogoPage } from "@ui/logo"
 import { useCreatePost } from "~/utils/hooks"
 import { Tabs } from "~/components/tabs"
+import { tabs, useTabContext } from "~/utils/context"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -81,11 +82,9 @@ const CreatePostWizard = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn, user } = useUser()
-  console.log(user)
+  const { isLoaded: userLoaded, isSignedIn } = useUser()
 
-  const tabs = ["For you", "Following"]
-  const [tab, setTab] = useState("For you")
+  const { tab } = useTabContext()
 
   // start fetching posts earlier for better load time. caching
   api.posts.getInfinite.useInfiniteQuery({}, {})
@@ -101,7 +100,7 @@ const Home: NextPage = () => {
         <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
       </Head>
       <PageLayout>
-        <Navbar page="Home">{isSignedIn && <Tabs tabs={tabs} tab={tab} setTab={setTab} />}</Navbar>
+        <Navbar page="Home">{isSignedIn && <Tabs />}</Navbar>
         {isSignedIn && (
           <div className="flex border-b border-slate-600 p-4">
             <CreatePostWizard />

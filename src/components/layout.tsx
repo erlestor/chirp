@@ -3,7 +3,7 @@ import { SignInButton, useUser } from "@clerk/nextjs"
 import { useState, type PropsWithChildren } from "react"
 import { Inter } from "next/font/google"
 import { Sidebar } from "./sidebar"
-import { useDarkmodeContext } from "~/utils/darkmode"
+import { useDarkmodeContext } from "~/utils/context"
 
 const inter = Inter({
   weight: "400",
@@ -15,7 +15,7 @@ export const PageLayout = (props: PropsWithChildren) => {
   const { isLoaded, isSignedIn } = useUser()
   const [showPopover, setShowPopover] = useState(false)
 
-  const darkmode = useDarkmodeContext()
+  const { darkmode } = useDarkmodeContext()
 
   const handlePageClick = () => {
     if (showPopover) {
@@ -37,7 +37,7 @@ export const PageLayout = (props: PropsWithChildren) => {
           </div>
         </div>
         {isLoaded && !isSignedIn && (
-          <div className="fixed bottom-0 flex w-full justify-center gap-4 bg-black p-4">
+          <div className="fixed bottom-0 flex w-full justify-center gap-4 bg-white p-4 dark:bg-black">
             <div className="text-xl">Don't miss what's happening</div>
             <SignInButton />
           </div>

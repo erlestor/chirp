@@ -14,11 +14,10 @@ export const Feed = ({
 }) => {
   // this is so ugly man wtf
 
-  const query = followingOnly && !authorId ? api.posts.getInfiniteFollowing : api.posts.getInfinite
-  const additionalOptions = authorId ? { authorId: authorId } : {}
+  const query = followingOnly ? api.posts.getInfiniteFollowing : api.posts.getInfinite
 
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = query.useInfiniteQuery(
-    { limit: limit, ...additionalOptions },
+    { limit: limit, authorId },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
@@ -46,7 +45,7 @@ export const Feed = ({
       // scrollableTarget="scrollableDiv"
       // below props only if you need pull down functionality
       refreshFunction={refetch}
-      pullDownToRefresh
+      pullDownToRefresh={window.innerWidth < 768}
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={
         <div className="text-md flex w-full justify-center text-center">

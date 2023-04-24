@@ -11,14 +11,13 @@ import { LoadingSpinner } from "@ui/loading"
 import { useState } from "react"
 import { Button } from "@ui/button"
 import { SignOutButton } from "@ui/SignOutButton"
-import { useFollowUser, useUnfollowUser } from "~/utils/hooks"
+import { useToggleFollow } from "~/utils/hooks"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const [followingText, setFollowingText] = useState<"Following" | "Unfollow">("Following")
   const { isSignedIn, user: currentUser } = useUser()
 
-  const { mutate: mutateFollow, isLoading: followLoading } = useFollowUser()
-  const { mutate: mutateUnfollow, isLoading: unfollowLoading } = useUnfollowUser()
+  const { mutate: mutateFollow } = useToggleFollow()
 
   const { data: user } = api.profile.getUserByUsername.useQuery({
     username,
@@ -26,26 +25,15 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   if (!user || !user.username) return <div>404</div>
 
-  const {
-    data: follow,
-    isLoading: isFollowLoading,
-    isFetching: isFollowFetching,
-  } = api.profile.isFollowing.useQuery({
+  const { data: isFollowing, isLoading: isFollowingLoading } = api.profile.isFollowing.useQuery({
     followedId: user.id,
   })
 
   const isCurrentUser = currentUser && user.id === currentUser.id
-  const isLoading = followLoading || unfollowLoading || isFollowLoading || isFollowFetching
-  const isFollowing = follow
+  const isLoading = isFollowingLoading
 
   const handleFollow = () => {
-    if (isFollowing) return
     mutateFollow({ followedId: user.id })
-  }
-
-  const handleUnfollow = () => {
-    if (!isFollowing) return
-    mutateUnfollow({ followedId: user.id })
   }
 
   return (
@@ -88,7 +76,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
               {!isLoading && !isCurrentUser && isFollowing && (
                 <Button
                   className="m-4 w-[105px] hover:border-red-700 hover:text-red-700"
-                  onClick={handleUnfollow}
+                  onClick={handleFollow}
                   onMouseEnter={() => setFollowingText("Unfollow")}
                   onMouseLeave={() => setFollowingText("Following")}
                   disabled={isLoading}

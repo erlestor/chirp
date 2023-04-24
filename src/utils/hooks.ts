@@ -1,38 +1,45 @@
 import { toast } from "react-hot-toast"
 import { api } from "~/utils/api"
 
-export const useFollowUser = () => {
+export const useToggleFollow = () => {
   const utils = api.useContext()
 
-  return api.profile.followUser.useMutation({
-    onSuccess: () => {
+  return api.profile.toggleFollowUser.useMutation({
+    onMutate: async ({ followedId }) => {
+      await utils.profile.isFollowing.cancel()
+      // TODO: optimistically update getUserByUsername aswell. The followedBy list needs appending or removing
+      // later on I'll check if following from getUserByUsername mby
+
+      const prevData = utils.profile.isFollowing.getData()
+
+      utils.profile.isFollowing.setData({ followedId }, (old) => !old)
+
+      return { prevData }
+    },
+    onError: (err, input, ctx) => {
+      const { followedId } = input
+      const wasFollowing = ctx?.prevData
+
+      // revert optimistc update
+      // TODO: it aint workin
+      utils.profile.isFollowing.setData({ followedId }, ctx?.prevData)
+
+      const errorMessage = err.data?.zodError?.fieldErrors.content
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+        return
+      }
+
+      if (err.data?.code === "TOO_MANY_REQUESTS") {
+        toast.error(err.message)
+        return
+      }
+
+      toast.error(`Failed to ${wasFollowing ? "unfollow" : "follow"}! Please try again later`)
+    },
+    onSettled: () => {
       void utils.profile.isFollowing.invalidate()
       void utils.profile.getUserByUsername.invalidate()
-    },
-    onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors.content
-      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
-      else {
-        toast.error("Failed to follow! Please try again later")
-      }
-    },
-  })
-}
-
-export const useUnfollowUser = () => {
-  const utils = api.useContext()
-
-  return api.profile.unfollowUser.useMutation({
-    onSuccess: () => {
-      void utils.profile.isFollowing.invalidate()
-      void utils.profile.getUserByUsername.invalidate()
-    },
-    onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors.content
-      if (errorMessage && errorMessage[0]) toast.error(errorMessage[0])
-      else {
-        toast.error("Failed to unfollow! Please try again later")
-      }
     },
   })
 }

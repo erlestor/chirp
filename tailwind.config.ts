@@ -1,4 +1,5 @@
 import { type Config } from "tailwindcss"
+import { fontFamily } from "tailwindcss/defaultTheme"
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
@@ -6,7 +7,10 @@ export default {
     extend: {
       colors: {
         dark: "#050505",
-        dim: "#9ca3af",
+        dim: "#6b7280",
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", ...fontFamily.sans],
       },
     },
   },

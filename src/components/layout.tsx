@@ -6,6 +6,13 @@ import { FaKiwiBird } from "react-icons/fa"
 import { AiFillHome } from "react-icons/ai"
 import { BsThreeDots } from "react-icons/bs"
 import Image from "next/image"
+import { Inter } from "next/font/google"
+
+const inter = Inter({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
 
 const Navlink = ({
   children,
@@ -17,9 +24,9 @@ const Navlink = ({
   text?: string
 }) => {
   return (
-    <Link href={href} className="flex items-center gap-5 rounded-full p-3 hover:bg-dark">
+    <Link href={href} className="flex items-center rounded-full p-3 hover:bg-dark">
       {children}
-      {text && <span className="text-xl font-medium">{text}</span>}
+      {text && <span className="ml-5 text-xl font-medium">{text}</span>}
     </Link>
   )
 }
@@ -35,9 +42,9 @@ export const PageLayout = (props: PropsWithChildren) => {
   }
 
   return (
-    <main>
+    <main className={`${inter.className} font-sans`}>
       <div className="flex justify-center">
-        <div className="sticky top-0 flex h-screen flex-col py-4 pr-8">
+        <div className="sticky top-0 flex h-screen flex-col py-4 pr-4">
           <div>
             <Navlink href="/">
               <FaKiwiBird size={30} />
@@ -54,7 +61,7 @@ export const PageLayout = (props: PropsWithChildren) => {
                     onClick={() => {
                       void signOut()
                     }}
-                    className="w-full rounded-2xl p-4 text-left hover:bg-dark"
+                    className="w-full rounded-2xl p-4 text-left transition hover:bg-dark"
                   >
                     Sign out
                   </button>
@@ -62,7 +69,7 @@ export const PageLayout = (props: PropsWithChildren) => {
               )}
               <button
                 onClick={handleUserBtnClick}
-                className="flex items-center rounded-full p-3 hover:bg-dark"
+                className="flex items-center rounded-full p-3 transition hover:bg-dark"
               >
                 <Image
                   src={user.profileImageUrl}

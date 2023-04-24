@@ -26,12 +26,16 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   if (!user || !user.username) return <div>404</div>
 
-  const { data: follow, isLoading: isFollowLoading } = api.profile.isFollowing.useQuery({
+  const {
+    data: follow,
+    isLoading: isFollowLoading,
+    isFetching: isFollowFetching,
+  } = api.profile.isFollowing.useQuery({
     followedId: user.id,
   })
 
   const isCurrentUser = currentUser && user.id === currentUser.id
-  const isLoading = followLoading || unfollowLoading || isFollowLoading
+  const isLoading = followLoading || unfollowLoading || isFollowLoading || isFollowFetching
   const isFollowing = follow
 
   const handleFollow = () => {

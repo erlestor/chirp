@@ -50,7 +50,7 @@ export const profileRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { userId } = input
 
-      const update = await ctx.prisma.user.update({
+      await ctx.prisma.user.update({
         where: {
           id: userId,
         },
@@ -92,41 +92,46 @@ export const profileRouter = createTRPCRouter({
       return !!follow
     }),
 
-  followUser: privateProcedure
+  toggleFollowUser: privateProcedure
     .input(z.object({ followedId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.userId
 
       const { success } = await ratelimit.limit(userId)
 
-      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
+      if (!success)
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Too many requests. Try waiting :)",
+        })
 
+      const filter = {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: input.followedId,
+        },
+      }
+
+      const existingFollow = await ctx.prisma.follow.findUnique({
+        where: filter,
+      })
+
+      // if user is following, delete that follow object
+      if (existingFollow) {
+        const unfollow = await ctx.prisma.follow.delete({
+          where: filter,
+        })
+        return unfollow
+      }
+
+      // if user is not following, create a follow object
       const follow = await ctx.prisma.follow.create({
         data: {
           followerId: userId,
           followingId: input.followedId,
         },
       })
+
       return follow
-    }),
-
-  unfollowUser: privateProcedure
-    .input(z.object({ followedId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.userId
-
-      const { success } = await ratelimit.limit(userId)
-
-      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
-
-      const unfollow = await ctx.prisma.follow.delete({
-        where: {
-          followerId_followingId: {
-            followerId: userId,
-            followingId: input.followedId,
-          },
-        },
-      })
-      return unfollow
     }),
 })

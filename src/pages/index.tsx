@@ -14,6 +14,7 @@ import { Navbar } from "@ui/navbar"
 import { Button } from "@ui/button"
 import { LogoPage } from "@ui/logo"
 import { useCreatePost } from "~/utils/hooks"
+import { Tabs } from "~/components/tabs"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -82,7 +83,9 @@ const CreatePostWizard = () => {
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   console.log(user)
-  const [page, setPage] = useState<"For you" | "Following">("For you")
+
+  const tabs = ["For you", "Following"]
+  const [tab, setTab] = useState("For you")
 
   // start fetching posts earlier for better load time. caching
   api.posts.getInfinite.useInfiniteQuery({}, {})
@@ -99,45 +102,14 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <Navbar page="Home">
-          {isSignedIn && (
-            <div className="flex border-b border-slate-600 pt-3">
-              <button
-                className={`flex w-1/2 grow justify-center pt-3 text-center text-dim hover:bg-dark`}
-                onClick={() => setPage("For you")}
-              >
-                <div
-                  className={`pb-3 ${
-                    page === "For you" ? "border-b-4 border-blue-500 font-bold text-slate-100" : ""
-                  }
-              `}
-                >
-                  For you
-                </div>
-              </button>
-              <button
-                className={`flex w-1/2 grow justify-center pt-3 text-center text-dim hover:bg-dark`}
-                onClick={() => setPage("Following")}
-              >
-                <div
-                  className={`pb-3 ${
-                    page === "Following"
-                      ? "border-b-4 border-blue-500 font-bold text-slate-100"
-                      : ""
-                  }
-              `}
-                >
-                  Following
-                </div>
-              </button>
-            </div>
-          )}
+          {isSignedIn && tabs[0] && <Tabs tabs={tabs} tab={tab} setTab={setTab} />}
         </Navbar>
         {isSignedIn && (
           <div className="flex border-b border-slate-600 p-4">
             <CreatePostWizard />
           </div>
         )}
-        <Feed followingOnly={page === "Following"} />
+        <Feed followingOnly={tab === "Following"} />
       </PageLayout>
     </>
   )

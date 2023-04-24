@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: "#050505",
+        dark: "#060606",
         dim: "#6b7280",
       },
       fontFamily: {

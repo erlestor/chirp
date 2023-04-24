@@ -1,5 +1,5 @@
 import { useClerk, useUser } from "@clerk/nextjs"
-import { type ReactNode, useState } from "react"
+import { type ReactNode } from "react"
 import { FaKiwiBird } from "react-icons/fa"
 import { AiFillHome } from "react-icons/ai"
 import { BsThreeDots } from "react-icons/bs"

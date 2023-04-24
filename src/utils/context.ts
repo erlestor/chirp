@@ -27,12 +27,10 @@ export function useDarkmode() {
   return useLocalStorage<boolean>("darkmode", true)
 }
 
-interface IDarkmodeContext {
+export const DarkmodeContext = createContext<{
   darkmode: boolean
   setDarkmode: Dispatch<SetStateAction<boolean>>
-}
-
-export const DarkmodeContext = createContext<IDarkmodeContext>({
+}>({
   darkmode: true,
   setDarkmode: (value) => {
     console.log("default func", value)
@@ -49,12 +47,10 @@ export function useTab() {
   return useLocalStorage<string>("tab", "For you")
 }
 
-interface ITabContext {
+export const TabContext = createContext<{
   tab: string
   setTab: Dispatch<SetStateAction<string>>
-}
-
-export const TabContext = createContext<ITabContext>({
+}>({
   tab: "For you",
   setTab: (value) => {
     console.log("default func", value)

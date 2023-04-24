@@ -101,9 +101,7 @@ const Home: NextPage = () => {
         <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
       </Head>
       <PageLayout>
-        <Navbar page="Home">
-          {isSignedIn && tabs[0] && <Tabs tabs={tabs} tab={tab} setTab={setTab} />}
-        </Navbar>
+        <Navbar page="Home">{isSignedIn && <Tabs tabs={tabs} tab={tab} setTab={setTab} />}</Navbar>
         {isSignedIn && (
           <div className="flex border-b border-slate-600 p-4">
             <CreatePostWizard />

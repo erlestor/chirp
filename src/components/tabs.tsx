@@ -7,6 +7,9 @@ export const Tabs = ({
   setTab: (page: string) => void
   tabs: string[]
 }) => {
+  // tab and setTab are state. tabs is an array of possible tabs
+  // want state in this component, but need it to change queries, dunno how to fix
+
   return (
     <div className="flex border-b border-slate-600 pt-3">
       {tabs.map((tab, tabIdx) => (

@@ -90,9 +90,6 @@ export const postsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      // TODO: filtrering på followingOnly
-      // hent posts der author te post e i following lista te currentUser
-
       const limit = input.limit ?? 50
       const { cursor } = input
 

@@ -20,7 +20,9 @@ export const Tabs = ({
         >
           <div
             className={`pb-3 ${
-              currentTab === tab ? "border-b-4 border-blue-500 font-bold text-slate-100" : ""
+              currentTab === tab
+                ? "border-b-4 border-blue-500 font-bold text-slate-900 dark:text-slate-100"
+                : ""
             }
               `}
           >

@@ -10,23 +10,23 @@ dayjs.extend(relativeTime)
 
 export const PostView = ({ post, author }: PostWithUser) => {
   return (
-    <div className="flex border-b border-slate-600 hover:bg-dark">
+    <div className="flex border-b border-slate-600 transition hover:bg-dark">
       <Link className="p-4" href={`/@${author.username}`}>
         <Image
           src={author.profilePicture}
           alt={`@${author.username}'s profile picture`}
-          className="h-14 w-14 rounded-full hover:brightness-75"
+          className="h-14 w-14 rounded-full transition hover:brightness-75"
           width={56}
           height={56}
         />
       </Link>
       <div className="flex grow flex-col">
-        <div className="text-dim flex gap-1">
+        <div className="flex gap-1">
           <Link className="pt-4" href={`/@${author.username}`}>
             <span>{`@${author.username}`}</span>
           </Link>
           <Link className="flex grow pr-4 pt-4" href={`/post/${post.id}`}>
-            <span className="font-thin">{` · ${dayjs(post.createdAt).fromNow()}`}</span>
+            <span className="font-thin text-dim">{` · ${dayjs(post.createdAt).fromNow()}`}</span>
           </Link>
         </div>
         <Link className="pb-4 pr-4" href={`/post/${post.id}`}>

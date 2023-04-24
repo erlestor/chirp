@@ -1,9 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react"
+import type { ButtonHTMLAttributes } from "react"
 import { cva } from "class-variance-authority"
 import type { VariantProps } from "class-variance-authority"
 
 const button = cva(
-  "rounded-full border border-slate-400 px-4 py-1.5 text-center font-semibold disabled:brightness-50",
+  "rounded-full border border-slate-400 px-4 py-1.5 text-center font-medium disabled:brightness-50",
   {
     variants: {
       contained: {

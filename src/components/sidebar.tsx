@@ -16,9 +16,12 @@ const Navlink = ({
   text?: string
 }) => {
   return (
-    <Link href={href} className="flex items-center rounded-full p-3 hover:bg-dark">
+    <Link
+      href={href}
+      className="flex items-center rounded-full p-3 hover:bg-hover-light dark:hover:bg-hover-dark"
+    >
       {children}
-      {text && <span className="ml-5 text-xl font-medium">{text}</span>}
+      {text && <span className="ml-5 hidden text-xl font-medium md:block">{text}</span>}
     </Link>
   )
 }
@@ -38,24 +41,22 @@ export const Sidebar = ({
   }
 
   return (
-    <div className="sticky top-0 flex h-screen flex-col py-4 pr-4">
-      <div>
-        <Navlink href="/">
-          <FaKiwiBird size={30} />
-        </Navlink>
-        <Navlink href="/" text="Home">
-          <AiFillHome size={30} />
-        </Navlink>
-      </div>
+    <div className="md: sticky bottom-0 z-10 flex justify-around bg-white px-4 py-2 transition dark:bg-black md:top-0 md:h-screen md:flex-col md:py-4 md:pl-0">
+      <Navlink href="/">
+        <FaKiwiBird size={30} />
+      </Navlink>
+      <Navlink href="/" text="Home">
+        <AiFillHome size={30} />
+      </Navlink>
       {user && user.username && (
         <div className="flex h-full flex-col justify-end">
           {showPopover && (
-            <div className="relative bottom-1 right-0 z-10 mt-2 w-full rounded-xl border border-slate-600">
+            <div className="absolute bottom-[88px] right-0 z-20 mt-2 w-full rounded-xl border border-slate-600 bg-white dark:bg-black md:relative md:bottom-1">
               <button
                 onClick={() => {
                   void signOut()
                 }}
-                className="pointer-events-auto w-full rounded-2xl p-4 text-left transition hover:bg-dark"
+                className="pointer-events-auto w-full rounded-2xl p-4 text-left transition hover:bg-hover-light dark:hover:bg-hover-dark"
               >
                 Sign out
               </button>
@@ -63,7 +64,7 @@ export const Sidebar = ({
           )}
           <button
             onClick={handleUserBtnClick}
-            className="flex items-center rounded-full p-3 transition hover:bg-dark"
+            className="flex items-center rounded-full p-3 transition hover:bg-hover-light dark:hover:bg-hover-dark"
           >
             <Image
               src={user.profileImageUrl}
@@ -72,8 +73,8 @@ export const Sidebar = ({
               width={48}
               height={48}
             />
-            <span className="mr-10 ">@{user.username}</span>
-            <BsThreeDots size={18} />
+            <span className="mr-10 hidden md:block ">@{user.username}</span>
+            <BsThreeDots className="hidden md:block" size={18} />
           </button>
         </div>
       )}

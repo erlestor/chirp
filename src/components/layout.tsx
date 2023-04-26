@@ -30,14 +30,18 @@ export const PageLayout = (props: PropsWithChildren) => {
       onClick={handlePageClick}
     >
       <div className="bg-white text-slate-900 transition duration-300 dark:bg-black dark:text-slate-100">
-        <div className={`${showPopover ? "pointer-events-none" : ""} flex justify-center`}>
+        <div
+          className={`${
+            showPopover ? "pointer-events-none" : ""
+          } flex flex-col-reverse justify-center md:flex-row`}
+        >
           <Sidebar showPopover={showPopover} setShowPopover={setShowPopover} />
           <div className="min-h-screen w-full border-slate-600 md:max-w-2xl md:border-x">
             {props.children}
           </div>
         </div>
         {isLoaded && !isSignedIn && (
-          <div className="fixed bottom-0 flex w-full justify-center gap-4 bg-white p-4 dark:bg-black">
+          <div className="fixed bottom-0 z-20 flex w-full justify-center gap-4 bg-white p-4 dark:bg-black">
             <div className="text-xl">Don't miss what's happening</div>
             <SignInButton />
           </div>

@@ -56,7 +56,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             alt="profile"
             width={128}
             height={128}
-            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black"
+            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-white dark:border-black"
             priority
           />
         </div>

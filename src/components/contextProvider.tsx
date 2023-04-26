@@ -1,6 +1,6 @@
 import { DarkmodeContext, TabContext, useDarkmode, useTab } from "~/utils/context"
 
-export default function DarkmodeContextProvider({ children }: { children: React.ReactNode }) {
+export default function ContextProvider({ children }: { children: React.ReactNode }) {
   const [darkmode, setDarkmode] = useDarkmode()
 
   const [tab, setTab] = useTab()

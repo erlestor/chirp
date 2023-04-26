@@ -7,7 +7,7 @@ import { dark } from "@clerk/themes"
 import { Toaster } from "react-hot-toast"
 import Head from "next/head"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import DarkmodeContextProvider from "~/components/contextProvider"
+import ContextProvider from "~/components/contextProvider"
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -17,7 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         baseTheme: dark,
       }}
     >
-      <DarkmodeContextProvider>
+      <ContextProvider>
         <Head>
           <title>Chirp</title>
           <meta name="description" content="thinking..." />
@@ -35,7 +35,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         />
         <Component {...pageProps} />
         <ReactQueryDevtools initialIsOpen={false} />
-      </DarkmodeContextProvider>
+      </ContextProvider>
     </ClerkProvider>
   )
 }

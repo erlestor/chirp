@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: "#060606",
+        hover: {
+          light: "#f3f4f6",
+          dark: "#09090b",
+        },
         dim: "#6b7280",
       },
       fontFamily: {

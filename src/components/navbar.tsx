@@ -19,7 +19,7 @@ export const Navbar = ({
       <div className="flex p-2">
         <div className="flex grow gap-2 p-2">
           {back && (
-            <Link href="/" className="rounded-full hover:bg-dark">
+            <Link href="/" className="rounded-full hover:bg-hover-light dark:hover:bg-hover-dark">
               <BsArrowLeftShort size={30} />
             </Link>
           )}
@@ -27,7 +27,7 @@ export const Navbar = ({
         </div>
         <button
           onClick={() => setDarkmode((prev) => !prev)}
-          className="h-10 w-10 items-center rounded-full p-2 hover:bg-dark"
+          className="h-10 w-10 items-center rounded-full p-2 hover:bg-hover-light dark:hover:bg-hover-dark"
         >
           {darkmode ? <MdOutlineDarkMode size={25} /> : <MdOutlineLightMode size={25} />}
         </button>

@@ -51,7 +51,7 @@ const CreatePostWizard = () => {
       <input
         type="text"
         placeholder="Type some emojis!"
-        className="bg-transparent outline-none"
+        className="w-full text-ellipsis bg-transparent outline-none"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
@@ -63,12 +63,7 @@ const CreatePostWizard = () => {
         disabled={isPosting}
       />
       {!isPosting && (
-        <Button
-          contained
-          onClick={handleSubmit}
-          disabled={input === "" || isPosting}
-          className="ml-auto"
-        >
+        <Button contained onClick={handleSubmit} disabled={input === "" || isPosting}>
           Post
         </Button>
       )}

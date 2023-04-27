@@ -1,10 +1,11 @@
 import { useClerk, useUser } from "@clerk/nextjs"
 import { type ReactNode } from "react"
 import { FaKiwiBird } from "react-icons/fa"
-import { AiFillHome } from "react-icons/ai"
+import { AiFillHome, AiOutlineHome } from "react-icons/ai"
 import { BsThreeDots } from "react-icons/bs"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 const Navlink = ({
   children,
@@ -36,6 +37,8 @@ export const Sidebar = ({
   const { user } = useUser()
   const { signOut } = useClerk()
 
+  const router = useRouter()
+
   const handleUserBtnClick = () => {
     setShowPopover(!showPopover)
   }
@@ -46,7 +49,7 @@ export const Sidebar = ({
         <FaKiwiBird size={30} />
       </Navlink>
       <Navlink href="/" text="Home">
-        <AiFillHome size={30} />
+        {router.pathname === "/" ? <AiFillHome size={30} /> : <AiOutlineHome size={30} />}
       </Navlink>
       {user && user.username && (
         <div className="flex h-full flex-col justify-end">

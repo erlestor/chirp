@@ -7,11 +7,12 @@ import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Feed } from "@ui/feed"
 import { useUser } from "@clerk/nextjs"
 import { Navbar } from "@ui/navbar"
-import { LoadingSpinner } from "@ui/loading"
 import { useState } from "react"
 import { Button } from "@ui/button"
 import { SignOutButton } from "@ui/SignOutButton"
 import { useToggleFollow } from "~/utils/hooks"
+import { LogoPage } from "~/components/logo"
+import { NotFound } from "~/components/404"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const [followingText, setFollowingText] = useState<"Following" | "Unfollow">("Following")
@@ -23,14 +24,13 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     username,
   })
 
-  if (!user || !user.username) return <div>404</div>
+  if (!user || !user.username) return <NotFound message="This user could not be found" />
 
-  const { data: isFollowing, isLoading: isFollowingLoading } = api.profile.isFollowing.useQuery({
+  const { data: isFollowing, isLoading } = api.profile.isFollowing.useQuery({
     followedId: user.id,
   })
 
   const isCurrentUser = currentUser && user.id === currentUser.id
-  const isLoading = isFollowingLoading
 
   const handleFollow = () => {
     mutateFollow({ followedId: user.id })
@@ -83,11 +83,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                 >
                   {followingText}
                 </Button>
-              )}
-              {!isCurrentUser && isLoading && (
-                <div className="flex items-center justify-center p-4">
-                  <LoadingSpinner size={20} />
-                </div>
               )}
             </>
           )}

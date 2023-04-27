@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 import { Sidebar } from "./sidebar"
 import { useDarkmodeContext } from "~/utils/context"
 
-const inter = Inter({
+export const inter = Inter({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-inter",

@@ -10,18 +10,22 @@ export const Tabs = () => {
       {tabs.map((tab, tabIdx) => (
         <button
           key={tabIdx}
-          className={`flex w-1/2 grow justify-center pt-3 text-center text-dim hover:bg-hover-light dark:hover:bg-hover-dark`}
+          className={`flex w-1/2 grow flex-col items-center pt-3 text-center text-dim hover:bg-hover-light dark:hover:bg-hover-dark`}
           onClick={() => setTab(tab)}
         >
-          <div
-            className={`pb-3 ${
-              currentTab === tab
-                ? "border-b-4 border-blue-500 font-bold text-slate-900 dark:text-slate-100"
-                : ""
-            }
+          <div>
+            <div
+              className={`pb-3 ${
+                currentTab === tab ? "font-bold text-slate-900 dark:text-slate-100" : ""
+              }
               `}
-          >
-            {tab}
+            >
+              {tab}
+            </div>
+            <div
+              className={`${currentTab === tab ? "h-1 rounded-xl bg-blue-500" : ""}
+              `}
+            />
           </div>
         </button>
       ))}

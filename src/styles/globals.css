@@ -5,3 +5,12 @@
 body {
   @apply overflow-y-auto overscroll-none scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-800;
 }
+
+input,
+textarea,
+button,
+select,
+a,
+div {
+  -webkit-tap-highlight-color: transparent;
+}

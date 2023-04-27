@@ -15,7 +15,6 @@ import { Button } from "@ui/button"
 import { LogoPage } from "@ui/logo"
 import { useCreatePost } from "~/utils/hooks"
 import { Tabs } from "~/components/tabs"
-import { tabs, useTabContext } from "~/utils/context"
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("")
@@ -39,8 +38,8 @@ const CreatePostWizard = () => {
   if (!user || !user.username) return <div />
 
   return (
-    <div className="flex w-full gap-3">
-      <Link href={"/@" + user.username}>
+    <div className="flex w-full items-center justify-start gap-3">
+      <Link href={"/@" + user.username} className="aspect-square h-14 w-14">
         <Image
           src={user.profileImageUrl}
           alt="profile picture"
@@ -52,7 +51,7 @@ const CreatePostWizard = () => {
       <input
         type="text"
         placeholder="Type some emojis!"
-        className="grow bg-transparent outline-none"
+        className="bg-transparent outline-none"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
@@ -64,13 +63,14 @@ const CreatePostWizard = () => {
         disabled={isPosting}
       />
       {!isPosting && (
-        <div className="flex items-center">
-          <div>
-            <Button contained onClick={handleSubmit} disabled={input === "" || isPosting}>
-              Post
-            </Button>
-          </div>
-        </div>
+        <Button
+          contained
+          onClick={handleSubmit}
+          disabled={input === "" || isPosting}
+          className="ml-auto"
+        >
+          Post
+        </Button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">

@@ -31,6 +31,14 @@ export const profileRouter = createTRPCRouter({
       return user
     }),
 
+  sayHello: publicProcedure
+    .meta({ /* 👉 */ openapi: { method: "GET", path: "/say-hello" } })
+    .input(z.object({ name: z.string() }))
+    .output(z.object({ greeting: z.string() }))
+    .query(({ input }) => {
+      return { greeting: `Hello ${input.name}!` }
+    }),
+
   createUser: publicProcedure.input(userValidator).query(async ({ ctx, input }) => {
     const { id, username, profilePicture } = input
 

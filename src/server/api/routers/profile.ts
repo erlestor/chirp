@@ -31,32 +31,38 @@ export const profileRouter = createTRPCRouter({
       return user
     }),
 
-  sayHello: publicProcedure
-    .meta({ /* 👉 */ openapi: { method: "GET", path: "/say-hello" } })
-    .input(z.object({ name: z.string() }))
-    .output(z.object({ greeting: z.string() }))
-    .query(({ input }) => {
-      return { greeting: `Hello ${input.name}!` }
+  createUser: publicProcedure
+    .meta({ openapi: { method: "POST", path: "/createUser" } })
+    .input(
+      z.object({
+        data: z.object({
+          id: z.string(),
+          username: z.string(),
+          profile_image_url: z.string(),
+        }),
+      })
+    )
+    .output(userValidator)
+    .query(async ({ ctx, input }) => {
+      const { id, username, profile_image_url: profilePicture } = input.data
+
+      const user = await ctx.prisma.user.create({
+        data: {
+          id,
+          username,
+          profilePicture,
+        },
+      })
+
+      return user
     }),
 
-  createUser: publicProcedure.input(userValidator).query(async ({ ctx, input }) => {
-    const { id, username, profilePicture } = input
-
-    const user = await ctx.prisma.user.create({
-      data: {
-        id,
-        username,
-        profilePicture,
-      },
-    })
-
-    return user
-  }),
-
   deleteUser: publicProcedure
-    .input(z.object({ userId: z.string() }))
+    .meta({ openapi: { method: "POST", path: "/deleteUser" } })
+    .input(z.object({ data: z.object({ id: z.string() }) }))
+    .output(userValidator)
     .query(async ({ ctx, input }) => {
-      const { userId } = input
+      const { id: userId } = input.data
 
       await ctx.prisma.user.update({
         where: {

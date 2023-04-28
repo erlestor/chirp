@@ -13,7 +13,7 @@ export const Tabs = () => {
           className={`flex w-1/2 grow flex-col items-center pt-3 text-center text-dim hover:bg-hover-light dark:hover:bg-hover-dark`}
           onClick={() => setTab(tab)}
         >
-          <div>
+          <div className="flex flex-col items-center">
             <div
               className={`pb-3 ${
                 currentTab === tab ? "font-bold text-slate-900 dark:text-slate-100" : ""
@@ -23,7 +23,11 @@ export const Tabs = () => {
               {tab}
             </div>
             <div
-              className={`${currentTab === tab ? "h-1 rounded-xl bg-blue-500" : ""}
+              className={`h-1 ${
+                currentTab === tab
+                  ? "w-full rounded-xl bg-blue-500 transition-all duration-300 "
+                  : "w-0"
+              }
               `}
             />
           </div>

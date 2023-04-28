@@ -1,4 +1,4 @@
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import { NotFound } from "~/components/404"
 
 const Page404: NextPage = () => {

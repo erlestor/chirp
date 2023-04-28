@@ -8,6 +8,8 @@ import NextCors from "nextjs-cors"
 // export API handler
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // TODO: unsure if cors is needed here for clerk
+
   await NextCors(req, res, {
     // Options
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
@@ -24,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             console.error(`❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`)
           }
         : undefined,
-  })
+  })(req, res)
 }
 
 export default handler

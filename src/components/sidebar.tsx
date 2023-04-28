@@ -44,7 +44,7 @@ export const Sidebar = ({
   }
 
   return (
-    <div className="sticky bottom-0 z-10 flex justify-around bg-white px-4 py-1 dark:bg-black md:top-0 md:h-screen md:flex-col md:justify-start md:py-4 md:pl-0">
+    <div className="sticky bottom-0 z-10 flex justify-around bg-white px-4 py-1 dark:bg-black md:top-0 md:h-screen md:flex-col md:justify-start md:bg-transparent md:py-4 md:pl-0 md:dark:bg-transparent">
       <Navlink href="/">
         <FaKiwiBird size={30} />
       </Navlink>

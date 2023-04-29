@@ -1,14 +1,12 @@
 import { FaKiwiBird } from "react-icons/fa"
-import { useDarkmodeContext } from "~/utils/context"
+import { PageLayout } from "./layout"
 
 export const LogoPage = () => {
-  const { darkmode } = useDarkmodeContext()
-
   return (
-    <div className={darkmode ? "dark" : ""}>
-      <div className="flex h-screen w-full items-center justify-center bg-white text-slate-900 dark:bg-black dark:text-slate-100">
+    <PageLayout layout="simple">
+      <div className="flex h-screen w-full items-center justify-center ">
         <FaKiwiBird size={60} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

@@ -3,11 +3,12 @@ name: CI
 on: [push, pull_request]
 
 env:
-  DATABASE_URL: "asdf"
-  UPSTASH_REDIS_REST_URL: "asdf"
+  DATABASE_URL: "https://fake.com"
+  UPSTASH_REDIS_REST_URL: "https://fake.com"
   UPSTASH_REDIS_REST_TOKEN: "asdf"
   CLERK_SECRET_KEY: "asdf"
   NODE_ENV: "asdf"
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "asdf"
 
 jobs:
   build:

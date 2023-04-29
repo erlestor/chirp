@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply overflow-y-auto overscroll-none scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-800;
+  @apply overflow-y-auto overscroll-none scrollbar-thin scrollbar-track-black scrollbar-thumb-slate-700;
 }
 
 input,

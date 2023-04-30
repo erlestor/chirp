@@ -89,9 +89,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
-      </Head>
       <PageLayout>
         <Navbar page="Home">{isSignedIn && <Tabs />}</Navbar>
         {isSignedIn && (

@@ -17,7 +17,7 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
     <>
       <Head>
         <title>{data.post.content + " - @" + data.author.username}</title>
-        <meta property="og:image" content="https://chirp-taupe-eight.vercel.app/api/og" />
+        <meta property="og:image" content="https://chirp-erlestor.vercel.app/api/og" />
       </Head>
       <PageLayout>
         <Navbar page="Post" back />

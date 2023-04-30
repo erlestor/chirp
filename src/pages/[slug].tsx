@@ -37,7 +37,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>@{user.username}</title>
+        <title>{"@" + user.username}</title>
       </Head>
       <PageLayout>
         <Navbar
@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export const getStaticPaths = () => {
-  return { paths: [], fallback: "blocking" }
+  return { paths: [{ params: { slug: "@erlestor" } }], fallback: "blocking" }
 }
 
 export default ProfilePage

@@ -7,21 +7,21 @@ import { generateSSGHelper } from "~/server/api/helpers/ssgHelper"
 import { Navbar } from "@ui/navbar"
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
-  const { data } = api.posts.getById.useQuery({
+  const { data: fullPost } = api.posts.getById.useQuery({
     id,
   })
 
-  if (!data) return <div>404</div>
+  if (!fullPost) return <div>404</div>
 
   return (
     <>
       <Head>
-        <title>{data.post.content + " - @" + data.author.username}</title>
+        <title>{fullPost.post.content + " - @" + fullPost.author.username}</title>
         <meta property="og:image" content="https://chirp-erlestor.vercel.app/api/og" />
       </Head>
       <PageLayout>
         <Navbar page="Post" back />
-        <PostView {...data} />
+        <PostView {...fullPost} />
       </PageLayout>
     </>
   )

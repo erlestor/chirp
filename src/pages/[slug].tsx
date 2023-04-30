@@ -59,14 +59,9 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           />
         </div>
         <div className="flex h-20 items-start justify-end">
-          {isSignedIn && (
+          {isSignedIn && !isLoading && !isCurrentUser && (
             <>
-              {!isLoading && !isCurrentUser && !isFollowing && (
-                <Button contained className="m-4" onClick={handleFollow} disabled={isLoading}>
-                  Follow
-                </Button>
-              )}
-              {!isLoading && !isCurrentUser && isFollowing && (
+              {isFollowing && (
                 <Button
                   className="m-4 w-[105px] hover:border-red-700 hover:text-red-700"
                   onClick={handleFollow}
@@ -75,6 +70,11 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                   disabled={isLoading}
                 >
                   {followingText}
+                </Button>
+              )}
+              {!isFollowing && (
+                <Button contained className="m-4" onClick={handleFollow} disabled={isLoading}>
+                  Follow
                 </Button>
               )}
             </>

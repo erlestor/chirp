@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export const getStaticPaths = () => {
-  return { paths: [{ params: { slug: "@erlestor" } }], fallback: "blocking" }
+  return { paths: [], fallback: "blocking" }
 }
 
 export default ProfilePage

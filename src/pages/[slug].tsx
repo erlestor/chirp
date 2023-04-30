@@ -9,9 +9,7 @@ import { useUser } from "@clerk/nextjs"
 import { Navbar } from "@ui/navbar"
 import { useState } from "react"
 import { Button } from "@ui/button"
-import { SignOutButton } from "@ui/SignOutButton"
 import { useToggleFollow } from "~/utils/hooks"
-import { LogoPage } from "~/components/logo"
 import { NotFound } from "~/components/404"
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
@@ -39,7 +37,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>{user.username}</title>
+        <title>@{user.username}</title>
       </Head>
       <PageLayout>
         <Navbar
@@ -63,11 +61,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <div className="flex h-20 items-start justify-end">
           {isSignedIn && (
             <>
-              {isCurrentUser && (
-                <div className="m-4">
-                  <SignOutButton />
-                </div>
-              )}
               {!isLoading && !isCurrentUser && !isFollowing && (
                 <Button contained className="m-4" onClick={handleFollow} disabled={isLoading}>
                   Follow

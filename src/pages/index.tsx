@@ -96,7 +96,7 @@ const Home: NextPage = () => {
             <CreatePostWizard />
           </div>
         )}
-        <Feed />
+        <Feed page="home" />
       </PageLayout>
     </>
   )

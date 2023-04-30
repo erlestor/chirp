@@ -96,7 +96,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           </div>
         </div>
         <div className="w-full border-b border-slate-600" />
-        <Feed authorId={user.id} />
+        <Feed authorId={user.id} page="user" />
       </PageLayout>
     </>
   )

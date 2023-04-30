@@ -4,10 +4,18 @@ import { PostView } from "@ui/postview"
 import { api } from "~/utils/api"
 import { useTabContext } from "~/utils/context"
 
-export const Feed = ({ authorId, limit }: { authorId?: string; limit?: number }) => {
+export const Feed = ({
+  authorId,
+  limit,
+  page,
+}: {
+  authorId?: string
+  limit?: number
+  page: "user" | "home"
+}) => {
   const { tab } = useTabContext()
 
-  const followingOnly = tab === "Following"
+  const followingOnly = tab === "Following" && page === "home"
   const query = followingOnly ? api.posts.getInfiniteFollowing : api.posts.getInfinite
 
   const { data, isLoading, fetchNextPage, hasNextPage, refetch } = query.useInfiniteQuery(

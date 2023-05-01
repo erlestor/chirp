@@ -1,11 +1,12 @@
 import { useClerk, useUser } from "@clerk/nextjs"
-import { type ReactNode } from "react"
+import { useRef, type ReactNode } from "react"
 import { FaKiwiBird } from "react-icons/fa"
 import { AiFillHome, AiOutlineHome } from "react-icons/ai"
 import { BsThreeDots } from "react-icons/bs"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useOnClickOutside } from "usehooks-ts"
 
 const Navlink = ({
   children,
@@ -34,14 +35,22 @@ export const Sidebar = ({
   showPopover: boolean
   setShowPopover: (showPopover: boolean) => void
 }) => {
+  // ref used for popup
+  const ref = useRef(null)
   const { user } = useUser()
   const { signOut } = useClerk()
 
   const router = useRouter()
 
   const handleUserBtnClick = () => {
-    setShowPopover(!showPopover)
+    setShowPopover(true)
   }
+
+  const handlePageClick = () => {
+    if (showPopover) setShowPopover(false)
+  }
+
+  useOnClickOutside(ref, handlePageClick)
 
   return (
     <div className="sticky bottom-0 z-10 flex justify-around bg-white px-4 py-1 dark:bg-black md:top-0 md:h-screen md:flex-col md:justify-start md:bg-transparent md:py-4 md:pl-0 md:dark:bg-transparent">
@@ -66,6 +75,7 @@ export const Sidebar = ({
             </div>
           )}
           <button
+            ref={ref}
             onClick={handleUserBtnClick}
             className="flex items-center rounded-full p-3 transition hover:bg-hover-light dark:hover:bg-hover-dark"
           >

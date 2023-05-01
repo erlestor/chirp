@@ -19,12 +19,8 @@ export const PageLayout = ({ children, layout = "default" }: Props) => {
   const [showPopover, setShowPopover] = useState(false)
   const firstRender = useRef(true)
 
-  const handlePageClick = () => {
-    if (showPopover) {
-      setShowPopover(false)
-      return
-    }
-  }
+  // TODO: this is a hack. would like to remove useEffect if possible
+  // used to avoid transition when dark mode turns on at load
 
   useEffect(() => {
     if (firstRender.current) firstRender.current = false
@@ -35,7 +31,7 @@ export const PageLayout = ({ children, layout = "default" }: Props) => {
       className={`${inter.className} bg-white font-sans text-slate-900 ${
         firstRender.current === false ? "transition duration-300" : ""
       } dark:bg-black dark:text-slate-100`}
-      onClick={handlePageClick}
+      // onClick={handlePageClick}
     >
       {layout === "default" && (
         <>
